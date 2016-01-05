@@ -31,6 +31,10 @@ Start the server and point your browser to http://localhost:8080/:
 
     cmd/server/server -config config.json
 
+You can batch-import your GPX files with:
+
+    cmd/import/import -config config.json -user admin /path/to/your/*.gpx
+
 ## License
 
 Tracklog is licensed under the MIT license.
