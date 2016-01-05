@@ -1,0 +1,37 @@
+<div class="row">
+  <div class="col-sm-12 kill-bottom-margin">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h2 class="panel-title">Recent Logs</h2>
+      </div>
+      {{with .Data.Logs}}
+        <table class="table table-bordered table-striped logs-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th width="15%">Date</th>
+              <th width="15%" class="text-right">Duration</th>
+              <th width="15%" class="text-right">Distance</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{range .}}
+              <tr>
+                <td><a href="/logs/{{.ID}}">{{.Name}}</a></td>
+                <td>{{.Date}}</td>
+                <td class="text-right">{{.Duration}}</td>
+                <td class="text-right">{{.Distance}}</td>
+              </tr>
+            {{end}}
+          </tbody>
+        </table>
+      {{else}}
+        <div class="panel-body kill-bottom-margin">
+          <p class="text-muted">
+            No logs
+          </p>
+        </div>
+      {{end}}
+    </div>
+  </div>
+</div>

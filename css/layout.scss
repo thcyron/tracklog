@@ -1,0 +1,53 @@
+body {
+  padding-top: $navbar-height + 1px;
+  padding-bottom: 20px;
+}
+
+.navbar-brand {
+  color: $brand-primary !important;
+}
+
+.navbar-upload-log-button {
+  padding-left: 15px;
+}
+
+.breadcrumb-container {
+  border-bottom: 1px solid $navbar-default-border;
+  margin-bottom: 20px;
+  padding: 10px 0;
+
+  .breadcrumb {
+    margin: 0;
+  }
+}
+
+#footer {
+  border-top: 1px solid $navbar-default-border;
+  padding-top: 20px;
+  margin: 20px 0 0 0;
+  color: $text-muted;
+
+  ul {
+    margin-bottom: 0;
+  }
+}
+
+$dl-horizontal-small-offset: 85px;
+
+.dl-horizontal-small {
+  dt {
+    float: left;
+    width: ($dl-horizontal-small-offset - 10px);
+    clear: left;
+    text-align: right;
+    @include text-overflow;
+  }
+  dd {
+    margin-left: $dl-horizontal-small-offset;
+    @include clearfix;
+  }
+}
+
+.kill-bottom-margin > :last-child {
+  margin-bottom: 0;
+}

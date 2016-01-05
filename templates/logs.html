@@ -1,0 +1,64 @@
+{{if .Data.Years}}
+  <div class="row">
+    <div class="col-sm-12">
+      <nav class="logs-years">
+        <ul class="pagination">
+          {{range .Data.Years}}
+            {{if .Active}}
+              <li class="active"><a href="/logs?year={{.Year}}">{{.Year}}</a></li>
+            {{else}}
+              <li><a href="/logs?year={{.Year}}">{{.Year}}</a></li>
+            {{end}}
+          {{end}}
+        </ul>
+      </nav>
+    </div>
+  </div>
+{{end}}
+
+<div class="row">
+  <div class="col-sm-12 kill-bottom-margin">
+    {{with .Data.Groups}}
+      {{range .}}
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h2 class="panel-title">{{.Title}}</h2>
+          </div>
+          <table class="table table-bordered table-striped logs-table">
+            <thead>
+              <th>Name</th>
+              <th width="15%">Date</th>
+              <th width="15%" class="text-right">Duration</th>
+              <th width="15%" class="text-right">Distance</th>
+            </thead>
+            <tbody>
+              {{range .Logs}}
+                <tr>
+                  <td><a href="/logs/{{.ID}}">{{.Name}}</a></td>
+                  <td>{{.Start}}</td>
+                  <td class="text-right">{{.Duration}}</td>
+                  <td class="text-right">{{.Distance}}</td>
+                </tr>
+              {{end}}
+            </tbody>
+            <tfoot>
+              <tr>
+                <th colspan="2"></th>
+                <th class="text-right">{{.Duration}}</th>
+                <th class="text-right">{{.Distance}}</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      {{end}}
+    {{else}}
+      <div class="panel panel-default">
+        <div class="panel-body kill-bottom-margin">
+          <p class="text-muted">
+            No logs
+          </p>
+        </div>
+      </div>
+    {{end}}
+  </div>
+</div>

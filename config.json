@@ -1,0 +1,12 @@
+{
+  "server": {
+    "development": true,
+    "listen_address": ":8080",
+    "csrf_auth_key": "jDPl5s9xDURaGcLQkjQtO7PAMAPbH8Cd",
+    "signing_key": "f3f387gf3giwrq2diwahfisavfswfs"
+  },
+  "db": {
+    "driver": "postgres",
+    "dsn": "dbname=tracklog sslmode=disable"
+  }
+}

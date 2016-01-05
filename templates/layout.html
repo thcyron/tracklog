@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>{{if .Title}}{{.Title}} – Tracklog{{else}}Tracklog{{end}}</title>
+    <link rel="stylesheet" href="/tracklog.css">
+    <script src="/tracklog.js"></script>
+    <script>
+      window.tracklog.csrfToken = {{.CSRFToken}};
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">Tracklog</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li class="{{if eq .ActiveTab "dashboard"}}active{{end}}"><a href="/">Dashboard</a></li>
+          <li class="{{if eq .ActiveTab "logs"}}active{{end}}"><a href="/logs">Logs</a></li>
+        </ul>
+        <div class="navbar-left navbar-upload-log-button">
+          <button class="btn btn-primary navbar-btn logs-upload-button">Upload Log</button>
+        </div>
+        <div class="navbar-right">
+          <p class="navbar-text">
+            Signed in as <b>{{.User.Username}}</b>
+            (<a href="/signout" data-method="post" class="navbar-link">Sign out</a>)
+          </p>
+        </div>
+      </div>
+    </nav>
+    {{with .Breadcrumb.Items}}
+      <div class="breadcrumb-container">
+        <div class="container">
+          <ol class="breadcrumb">
+            {{range .}}
+              {{if .Active}}
+                <li class="active">{{.Title}}</li>
+              {{else}}
+                <li><a href="{{.Path}}">{{.Title}}</a></li>
+              {{end}}
+            {{end}}
+          </ol>
+        </div>
+      </div>
+    {{end}}
+    <div class="container">
+      {{.Content}}
+    </div>
+    <footer id="footer">
+      <div class="container">
+        <ul class="list-inline">
+          <li>Tracklog {{.Version}}</li>
+          <li>Runtime: {{.Runtime}}</li>
+        </ul>
+      </div>
+    </footer>
+  </body>
+</html>

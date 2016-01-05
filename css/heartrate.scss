@@ -1,0 +1,54 @@
+$heart-rate-red-color: $progress-bar-danger-bg;
+$heart-rate-anaerobic-color: $progress-bar-warning-bg;
+$heart-rate-aerobic-color: lighten($progress-bar-success-bg, 10%);
+$heart-rate-fatburning-color: darken($progress-bar-success-bg, 10%);
+$heart-rate-easy-color: $progress-bar-info-bg;
+$heart-rate-none-color: $gray-light;
+
+.text-heart-rate-red {
+  color: $heart-rate-red-color;
+}
+
+.text-heart-rate-anaerobic {
+  color: $heart-rate-anaerobic-color;
+}
+
+.text-heart-rate-aerobic {
+  color: $heart-rate-aerobic-color;
+}
+
+.text-heart-rate-fatburning {
+  color: $heart-rate-fatburning-color;
+}
+
+.text-heart-rate-easy {
+  color: $heart-rate-easy-color;
+}
+
+.text-heart-rate-none {
+  color: $heart-rate-none-color;
+}
+
+.heart-rate-red {
+  @include progress-bar-variant($heart-rate-red-color);
+}
+
+.heart-rate-anaerobic {
+  @include progress-bar-variant($heart-rate-anaerobic-color);
+}
+
+.heart-rate-aerobic {
+  @include progress-bar-variant($heart-rate-aerobic-color);
+}
+
+.heart-rate-fatburning {
+  @include progress-bar-variant($heart-rate-fatburning-color);
+}
+
+.heart-rate-easy {
+  @include progress-bar-variant($heart-rate-easy-color);
+}
+
+.heart-rate-none {
+  @include progress-bar-variant($heart-rate-none-color);
+}

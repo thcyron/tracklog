@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Sign In – Tracklog</title>
+    <link rel="stylesheet" href="/tracklog.css">
+    <script src="/tracklog.js"></script>
+    <script>
+      window.tracklog.csrfToken = {{.CSRFToken}};
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-4 col-sm-offset-4">
+          {{if .Data.Alert}}
+            <div class="alert alert-danger">
+              <p>{{.Data.Alert}}</p>
+            </div>
+          {{end}}
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <form action="/signin" method="post">
+                <div class="form-group">
+                  <input type="text" class="form-control" name="username" placeholder="Username" required value="{{.Data.Username}}">
+                </div>
+                <div class="form-group">
+                  <input type="password" class="form-control" name="password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
