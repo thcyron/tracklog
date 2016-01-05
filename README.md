@@ -2,6 +2,10 @@
 
 **Tracklog** is a web application for managing GPX track files written in Go.
 
+![Logs screenshot](doc/logs.jpg)
+
+![Log screenshot](doc/log.jpg)
+
 ## Installation
 
 First, make sure you have Go and Node.js installed.
