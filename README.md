@@ -21,7 +21,7 @@ Create and initialize a new Postgres database, which will also create a new user
 with both username and password set to *admin*:
 
     createdb tracklog
-    psql tracklog < db/postgresql.sql
+    psql tracklog < db/postgres.sql
 
 Start the server and point your browser to http://localhost:8080/:
 
