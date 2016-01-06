@@ -67,9 +67,9 @@ export default class LogDetails extends React.Component {
     }
 
     let dlElements = [];
-    details.forEach((detail) => {
-      dlElements.push(<dt>{detail[0]}</dt>);
-      dlElements.push(<dd>{detail[1]}</dd>);
+    details.forEach((detail, i) => {
+      dlElements.push(<dt key={2*i}>{detail[0]}</dt>);
+      dlElements.push(<dd key={2*i+1}>{detail[1]}</dd>);
     });
 
     return (
