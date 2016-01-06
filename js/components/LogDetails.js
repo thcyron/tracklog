@@ -7,6 +7,14 @@ export default class LogDetails extends React.Component {
     super(props);
   }
 
+  onEditClick(event) {
+    event.preventDefault();
+
+    if (this.props.onEdit) {
+      this.props.onEdit();
+    }
+  }
+
   render() {
     let hrZones = "";
 
@@ -87,6 +95,7 @@ export default class LogDetails extends React.Component {
         {hrZones}
         <ul className="list-group">
           <li className="list-group-item"><a href={`/logs/${this.props.log.id}/download`}>Download .gpx file</a></li>
+          <li className="list-group-item"><a href="#edit" onClick={this.onEditClick.bind(this)}>Edit</a></li>
           <li className="list-group-item"><a href={`/logs/${this.props.log.id}`} data-method="delete">Delete</a></li>
         </ul>
       </div>

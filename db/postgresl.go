@@ -370,6 +370,26 @@ func (d *Postgres) addTrackPoint(tx *sql.Tx, track *tracklog.Track, point *track
 	return nil
 }
 
+func (d *Postgres) UpdateLog(log *tracklog.Log) error {
+	tx, err := d.db.Begin()
+	if err != nil {
+		return nil
+	}
+
+	query, args := sqlbuilder.Postgres.Update().
+		Table("log").
+		Set("name", log.Name).
+		Where("id = ?", log.ID).
+		Build()
+
+	_, err = tx.Exec(query, args...)
+	if err != nil {
+		return err
+	}
+
+	return tx.Commit()
+}
+
 func (d *Postgres) DeleteLog(log *tracklog.Log) error {
 	tx, err := d.db.Begin()
 	if err != nil {

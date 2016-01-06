@@ -312,6 +312,47 @@ func (s *Server) HandleDownloadLog(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(log.GPX))
 }
 
+type patchLogRequest struct {
+	Name string `json:"name"`
+}
+
+func (s *Server) HandlePatchLog(w http.ResponseWriter, r *http.Request) {
+	ctx := NewContext(r, w)
+
+	user := ctx.User()
+	if user == nil {
+		s.redirectToSignIn(w, r)
+		return
+	}
+
+	id, err := strconv.Atoi(ctx.Params().ByName("id"))
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+
+	log, err := s.db.UserLogByID(user, id)
+	if err != nil {
+		panic(err)
+	}
+	if log == nil {
+		http.NotFound(w, r)
+		return
+	}
+
+	var req patchLogRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		panic(err)
+	}
+	log.Name = req.Name
+
+	if err := s.db.UpdateLog(log); err != nil {
+		panic(err)
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
 func (s *Server) HandleDeleteLog(w http.ResponseWriter, r *http.Request) {
 	ctx := NewContext(r, w)
 

@@ -13,6 +13,7 @@ type DB interface {
 	UserLogByID(user *tracklog.User, id int) (*tracklog.Log, error)
 	UserLogsByYear(user *tracklog.User, year int) ([]*tracklog.Log, error)
 	AddUserLog(user *tracklog.User, log *tracklog.Log) error
+	UpdateLog(log *tracklog.Log) error
 	DeleteLog(log *tracklog.Log) error
 }
 

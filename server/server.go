@@ -55,6 +55,7 @@ func New(config *tracklog.Config, db db.DB) *Server {
 	r.POST("/logs", s.wrapHandler(s.HandlePostLog))
 	r.GET("/logs/:id/download", s.wrapHandler(s.HandleDownloadLog))
 	r.GET("/logs/:id", s.wrapHandler(s.HandleGetLog))
+	r.PATCH("/logs/:id", s.wrapHandler(s.HandlePatchLog))
 	r.DELETE("/logs/:id", s.wrapHandler(s.HandleDeleteLog))
 	r.GET("/", s.wrapHandler(s.HandleDashboard))
 	n.UseHandler(r)
