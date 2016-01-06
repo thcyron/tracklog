@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"path"
 	"time"
 
 	"github.com/codegangsta/negroni"
@@ -15,6 +16,9 @@ import (
 	"github.com/thcyron/tracklog"
 	"github.com/thcyron/tracklog/db"
 )
+
+// DataDir points to the directory where the public/ and templates/ directories are.
+var DataDir = "."
 
 type Server struct {
 	config      *tracklog.Config
@@ -47,7 +51,7 @@ func New(config *tracklog.Config, db db.DB) *Server {
 	n.UseFunc(s.userAuthMiddleware)
 
 	r := httprouter.New()
-	r.NotFound = http.FileServer(http.Dir("public"))
+	r.NotFound = http.FileServer(http.Dir(path.Join(DataDir, "public")))
 	r.GET("/signin", s.wrapHandler(s.HandleGetSignIn))
 	r.POST("/signin", s.wrapHandler(s.HandlePostSignIn))
 	r.POST("/signout", s.wrapHandler(s.HandlePostSignOut))
@@ -109,7 +113,7 @@ func (server *Server) render(w http.ResponseWriter, r *http.Request, name string
 	ctx := NewContext(r, w)
 
 	// TODO(thcyron): Load templates initially at server startup, not on every request.
-	tmpl, err := template.ParseGlob("templates/*.html")
+	tmpl, err := template.ParseGlob(path.Join(DataDir, "templates/*.html"))
 	if err != nil {
 		panic(err)
 	}
