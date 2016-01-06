@@ -177,30 +177,30 @@ func (s *Server) HandlePostLog(w http.ResponseWriter, r *http.Request) {
 }
 
 type logData struct {
-	Log    logDataLog
-	Tracks [][]logDataPoint
+	Log logDataLog
 }
 
 type logDataLog struct {
-	ID       int
-	Name     string
-	Start    string
-	End      string
-	Duration string
-	Distance string
-	Speed    string
-	Pace     string
-	HR       string
-	HRZones  logDataHRZones
+	ID       int              `json:"id"`
+	Name     string           `json:"name"`
+	Start    string           `json:"start"`
+	End      string           `json:"end"`
+	Duration string           `json:"duration"`
+	Distance string           `json:"distance"`
+	Speed    string           `json:"speed"`
+	Pace     string           `json:"pace"`
+	HR       string           `json:"hr,omitempty"`
+	HRZones  logDataHRZones   `json:"hrzones"`
+	Tracks   [][]logDataPoint `json:"tracks"`
 }
 
 type logDataHRZones struct {
-	Red        float64
-	Anaerobic  float64
-	Aerobic    float64
-	FatBurning float64
-	Easy       float64
-	None       float64
+	Red        float64 `json:"red"`
+	Anaerobic  float64 `json:"anaerobic"`
+	Aerobic    float64 `json:"aerobic"`
+	FatBurning float64 `json:"fatburning"`
+	Easy       float64 `json:"easy"`
+	None       float64 `json:"none"`
 }
 
 type logDataPoint struct {
@@ -242,8 +242,8 @@ func (s *Server) HandleGetLog(w http.ResponseWriter, r *http.Request) {
 			Distance: tracklog.Distance(log.Distance).String(),
 			Speed:    tracklog.Speed(log.Speed()).String(),
 			Pace:     tracklog.Speed(log.Speed()).Pace().String(),
+			Tracks:   make([][]logDataPoint, 0, len(log.Tracks)),
 		},
-		Tracks: make([][]logDataPoint, 0, len(log.Tracks)),
 	}
 
 	for _, track := range log.Tracks {
@@ -254,7 +254,7 @@ func (s *Server) HandleGetLog(w http.ResponseWriter, r *http.Request) {
 				Lon: point.Longitude,
 			})
 		}
-		data.Tracks = append(data.Tracks, points)
+		data.Log.Tracks = append(data.Log.Tracks, points)
 	}
 
 	hrSummary := tracklog.HeartrateSummaryForLog(log)

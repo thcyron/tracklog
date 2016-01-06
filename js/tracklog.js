@@ -3,9 +3,8 @@
 import $ from "../node_modules/jquery/dist/jquery";
 import "whatwg-fetch";
 
-import Log from "./log";
-import Map from "./map";
 import {uploadLogs} from "./upload";
+import {renderLog} from "./components/Log";
 
 $(() => {
   $("a[data-method]").on("click", (event) => {
@@ -77,6 +76,5 @@ $(() => {
 });
 
 window.tracklog = {
-  Log: Log,
-  Map: Map,
+  renderLog: renderLog,
 };

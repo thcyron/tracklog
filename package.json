@@ -8,6 +8,7 @@
   "devDependencies": {
     "babel-cli": "^6.0.0",
     "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
     "browserify": "^10.2.6",
     "babelify": "^7.2.0",
     "gulp": "^v3.9.0",
@@ -16,6 +17,8 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
+    "react": "^0.14.5",
+    "react-dom": "^0.14.5",
     "jquery": "^2.1.4",
     "bootstrap-sass": "^3.3.6",
     "leaflet": "^0.7.7",
