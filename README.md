@@ -15,9 +15,8 @@ To build the JavaScript and CSS assets, run:
     npm install
     npm run build
 
-Now, fetch dependency packages and build the command line programs:
-    
-    go get ./...
+Now, build the command line programs:
+
     (cd cmd/server && go build)
     (cd cmd/import && go build)
 
