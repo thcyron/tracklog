@@ -68,6 +68,12 @@ func (d *Postgres) UserByUsername(username string) (*tracklog.User, error) {
 }
 
 func (d *Postgres) RecentUserLogs(user *tracklog.User, count int) ([]*tracklog.Log, error) {
+	tx, err := d.db.Begin()
+	if err != nil {
+		return nil, err
+	}
+	defer tx.Rollback() // read-only transaction
+
 	var (
 		log  tracklog.Log
 		logs []*tracklog.Log
@@ -87,7 +93,7 @@ func (d *Postgres) RecentUserLogs(user *tracklog.User, count int) ([]*tracklog.L
 		Limit(count).
 		Build()
 
-	rows, err := d.db.Query(query, args...)
+	rows, err := tx.Query(query, args...)
 	if err != nil {
 		return nil, err
 	}
@@ -102,6 +108,13 @@ func (d *Postgres) RecentUserLogs(user *tracklog.User, count int) ([]*tracklog.L
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
+
+	for _, log := range logs {
+		if err := d.getLogTags(tx, log); err != nil {
+			return nil, err
+		}
+	}
+
 	return logs, nil
 }
 
@@ -165,6 +178,9 @@ func (d *Postgres) UserLogByID(user *tracklog.User, id int) (*tracklog.Log, erro
 	}
 
 	if err := d.getLogTracks(tx, log); err != nil {
+		return nil, err
+	}
+	if err := d.getLogTags(tx, log); err != nil {
 		return nil, err
 	}
 
@@ -253,7 +269,42 @@ func (d *Postgres) getTrackPoints(tx *sql.Tx, track *tracklog.Track) error {
 	return nil
 }
 
+func (d *Postgres) getLogTags(tx *sql.Tx, log *tracklog.Log) error {
+	var (
+		tag  string
+		tags []string
+	)
+
+	query, args, dest := sqlbuilder.Postgres.Select().
+		From("log_tag").
+		Map("tag", &tag).
+		Where("log_id = ?", log.ID).
+		Build()
+
+	rows, err := tx.Query(query, args...)
+	if err != nil {
+		return err
+	}
+	for rows.Next() {
+		if err := rows.Scan(dest...); err != nil {
+			return err
+		}
+		tags = append(tags, tag)
+	}
+	if err := rows.Err(); err != nil {
+		return err
+	}
+	log.Tags = tags
+	return nil
+}
+
 func (d *Postgres) UserLogsByYear(user *tracklog.User, year int) ([]*tracklog.Log, error) {
+	tx, err := d.db.Begin()
+	if err != nil {
+		return nil, err
+	}
+	defer tx.Rollback() // read-only transaction
+
 	var (
 		log  tracklog.Log
 		logs []*tracklog.Log
@@ -273,7 +324,7 @@ func (d *Postgres) UserLogsByYear(user *tracklog.User, year int) ([]*tracklog.Lo
 		Order("start DESC").
 		Build()
 
-	rows, err := d.db.Query(query, args...)
+	rows, err := tx.Query(query, args...)
 	if err != nil {
 		return nil, err
 	}
@@ -289,6 +340,13 @@ func (d *Postgres) UserLogsByYear(user *tracklog.User, year int) ([]*tracklog.Lo
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
+
+	for _, log := range logs {
+		if err := d.getLogTags(tx, log); err != nil {
+			return nil, err
+		}
+	}
+
 	return logs, nil
 }
 

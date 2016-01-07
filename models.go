@@ -23,6 +23,7 @@ type Log struct {
 	Distance uint
 	GPX      string
 	Tracks   []*Track
+	Tags     []string
 }
 
 type Track struct {

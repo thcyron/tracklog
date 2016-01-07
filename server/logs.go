@@ -36,6 +36,7 @@ type logsDataLog struct {
 	Start    string
 	Duration string
 	Distance string
+	Tags     []string
 }
 
 func (s *Server) HandleGetLogs(w http.ResponseWriter, r *http.Request) {
@@ -100,6 +101,7 @@ func (s *Server) HandleGetLogs(w http.ResponseWriter, r *http.Request) {
 			Start:    log.Start.Format(logTimeFormat),
 			Duration: tracklog.Duration(log.Duration).String(),
 			Distance: tracklog.Distance(log.Distance).String(),
+			Tags:     log.Tags,
 		})
 		distance += log.Distance
 		duration += log.Duration
@@ -192,6 +194,7 @@ type logDataLog struct {
 	HR       string           `json:"hr,omitempty"`
 	HRZones  logDataHRZones   `json:"hrzones"`
 	Tracks   [][]logDataPoint `json:"tracks"`
+	Tags     []string         `json:"tags"`
 }
 
 type logDataHRZones struct {
@@ -243,7 +246,11 @@ func (s *Server) HandleGetLog(w http.ResponseWriter, r *http.Request) {
 			Speed:    tracklog.Speed(log.Speed()).String(),
 			Pace:     tracklog.Speed(log.Speed()).Pace().String(),
 			Tracks:   make([][]logDataPoint, 0, len(log.Tracks)),
+			Tags:     log.Tags,
 		},
+	}
+	if data.Log.Tags == nil {
+		data.Log.Tags = make([]string, 0, 0)
 	}
 
 	for _, track := range log.Tracks {

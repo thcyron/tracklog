@@ -26,7 +26,10 @@
           </div>
           <table class="table table-bordered table-striped logs-table">
             <thead>
-              <th>Name</th>
+              <th>
+                Name
+                <span class="pull-right">Tags</span>
+              </th>
               <th width="15%">Date</th>
               <th width="15%" class="text-right">Duration</th>
               <th width="15%" class="text-right">Distance</th>
@@ -34,7 +37,16 @@
             <tbody>
               {{range .Logs}}
                 <tr>
-                  <td><a href="/logs/{{.ID}}">{{.Name}}</a></td>
+                  <td>
+                    <a href="/logs/{{.ID}}">{{.Name}}</a>
+                    {{with .Tags}}
+                      <span class="pull-right">
+                        {{range .}}
+                          <span class="label label-primary">{{.}}</span>
+                        {{end}}
+                      </span>
+                    {{end}}
+                  </td>
                   <td>{{.Start}}</td>
                   <td class="text-right">{{.Duration}}</td>
                   <td class="text-right">{{.Distance}}</td>

@@ -2,6 +2,33 @@
 
 import React from "react";
 
+class LogTags extends React.Component {
+  get tags() {
+    return this.props.log.tags;
+  }
+
+  render() {
+    const tags = this.tags.map((tag, i) => {
+      return (
+        <li key={i} className="list-group-item">
+          <span className="label label-primary">{tag}</span>
+        </li>
+      );
+    });
+
+    return (
+      <div className="panel panel-default">
+        <div className="panel-heading">
+          <h4 className="panel-title">Tags</h4>
+        </div>
+        <ul className="list-group">
+          {tags}
+        </ul>
+      </div>
+    );
+  }
+}
+
 export default class LogDetails extends React.Component {
   constructor(props) {
     super(props);
@@ -16,7 +43,11 @@ export default class LogDetails extends React.Component {
   }
 
   render() {
-    let hrZones = "";
+    let tags = "", hrZones = "";
+
+    if (this.props.log.tags.length > 0) {
+      tags = <LogTags log={this.props.log} />;
+    }
 
     if (this.props.log.hr) {
       hrZones = (
@@ -92,6 +123,7 @@ export default class LogDetails extends React.Component {
             </dl>
           </div>
         </div>
+        {tags}
         {hrZones}
         <ul className="list-group">
           <li className="list-group-item"><a href={`/logs/${this.props.log.id}/download`}>Download .gpx file</a></li>

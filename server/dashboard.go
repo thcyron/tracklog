@@ -18,6 +18,7 @@ type dashboardLog struct {
 	Date     string
 	Duration string
 	Distance string
+	Tags     []string
 }
 
 func (s *Server) HandleDashboard(w http.ResponseWriter, r *http.Request) {
@@ -42,6 +43,7 @@ func (s *Server) HandleDashboard(w http.ResponseWriter, r *http.Request) {
 			Date:     log.Start.Format(logTimeFormat),
 			Duration: tracklog.Duration(log.Duration).String(),
 			Distance: tracklog.Distance(log.Distance).String(),
+			Tags:     log.Tags,
 		})
 	}
 
