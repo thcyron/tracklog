@@ -2,6 +2,7 @@
 
 import gulp from "gulp";
 import sass from "gulp-sass";
+import uglify from "gulp-uglify";
 import browserify from "browserify";
 import source from "vinyl-source-stream";
 
@@ -17,6 +18,13 @@ gulp.task("js", () => {
     .transform("babelify")
     .bundle()
     .pipe(source("tracklog.js"))
+    .pipe(gulp.dest("public"));
+});
+
+gulp.task("compress", () => {
+  return gulp
+    .src("public/tracklog.js")
+    .pipe(uglify())
     .pipe(gulp.dest("public"));
 });
 
