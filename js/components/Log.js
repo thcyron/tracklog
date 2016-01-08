@@ -2,6 +2,7 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
+import Immutable from "immutable";
 
 import LogMap from "./LogMap";
 import LogDetails from "./LogDetails";
@@ -9,7 +10,16 @@ import LogDetails from "./LogDetails";
 class LogName extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { name: props.log.name };
+
+    this.state = {
+      name: props.log.get("name"),
+    };
+  }
+
+  componentWillReceiveProps(props) {
+    this.state = {
+      name: props.log.get("name"),
+    };
   }
 
   onChange(event) {
@@ -33,7 +43,7 @@ class LogName extends React.Component {
     }
 
     return (
-      <h1 className="log-name">{this.props.log.name}</h1>
+      <h1 className="log-name">{this.props.log.get("name")}</h1>
     );
   }
 }
@@ -43,33 +53,33 @@ export default class Log extends React.Component {
     super(props);
 
     this.state = {
+      log: props.log,
       editing: false,
     };
   }
 
   onEdit() {
-    if (this.state.editing) {
-      return;
+    if (!this.state.editing) {
+      this.setState({
+        editing: true,
+        oldLog: this.state.log,
+      });
     }
+  }
 
+  onNameChange(name: string) {
     this.setState({
-      editing: true,
-      name: this.props.log.name,
+      log: this.state.log.set("name", name),
     });
   }
 
-  onNameChange(name) {
-    this.state.name = name;
-  }
-
   onSave(event) {
-    let newLog = this.props.log;
-    newLog.name = this.state.name;
+    this.setState({
+      editing: false,
+      oldLog: null,
+    });
 
-    this.props = { log: newLog };
-    this.setState({ editing: false });
-
-    window.fetch(`/logs/${this.props.log.id}`, {
+    window.fetch(`/logs/${this.state.log.get("id")}`, {
       method: "PATCH",
       credentials: "same-origin",
       headers: {
@@ -77,13 +87,16 @@ export default class Log extends React.Component {
         "X-CSRF-Token": window.tracklog.csrfToken,
       },
       body: JSON.stringify({
-        "name": newLog.name,
+        "name": this.state.log.get("name"),
       }),
     })
     .then((data) => {
       if (data.status != 204) {
         alert("Failed to save log");
-        this.setState({ editing: true });
+        this.setState({
+          editing: true,
+          oldLog: this.state.log,
+        });
       }
     })
     .catch((err) => {
@@ -94,6 +107,8 @@ export default class Log extends React.Component {
   onCancel(event) {
     this.setState({
       editing: false,
+      log: this.state.oldLog,
+      oldLog: null,
     });
   }
 
@@ -102,7 +117,7 @@ export default class Log extends React.Component {
       return (
         <div className="row">
           <div className="col-md-9">
-            <LogName log={this.props.log} editing={this.state.editing} onChange={this.onNameChange.bind(this)} />
+            <LogName log={this.state.log} editing={this.state.editing} onChange={this.onNameChange.bind(this)} />
           </div>
           <div className="col-md-3">
             <div className="row">
@@ -121,7 +136,7 @@ export default class Log extends React.Component {
     return (
       <div className="row">
         <div className="col-md-12">
-          <LogName log={this.props.log} editing={this.state.editing} />
+          <LogName log={this.state.log} editing={this.state.editing} />
         </div>
       </div>
     );
@@ -133,10 +148,10 @@ export default class Log extends React.Component {
         {this.topRow}
         <div className="row">
           <div className="col-md-9">
-            <LogMap log={this.props.log} />
+            <LogMap log={this.state.log} />
           </div>
           <div className="col-md-3">
-            <LogDetails log={this.props.log} onEdit={this.onEdit.bind(this)} />
+            <LogDetails log={this.state.log} onEdit={this.onEdit.bind(this)} />
           </div>
         </div>
       </div>
@@ -145,5 +160,6 @@ export default class Log extends React.Component {
 }
 
 export function renderLog(container, log) {
-  ReactDOM.render(<Log log={log} />, container);
+  const immutableLog = Immutable.fromJS(log);
+  ReactDOM.render(<Log log={immutableLog} />, container);
 }

@@ -3,18 +3,23 @@
 import React from "react";
 
 class LogTags extends React.Component {
-  get tags() {
-    return this.props.log.tags;
+  constructor(props) {
+    super(props);
+
+    let tags = this.props.log.get("tags");
+    this.state = {
+      tags: tags,
+    };
   }
 
   render() {
-    const tags = this.tags.map((tag, i) => {
+    const tags = this.state.tags.map((tag, i) => {
       return (
         <li key={i} className="list-group-item">
           <span className="label label-primary">{tag}</span>
         </li>
       );
-    });
+    }).toJS();
 
     return (
       <div className="panel panel-default">
@@ -45,11 +50,13 @@ export default class LogDetails extends React.Component {
   render() {
     let tags = "", hrZones = "";
 
-    if (this.props.log.tags.length > 0) {
+    if (this.props.log.get("tags").size > 0) {
       tags = <LogTags log={this.props.log} />;
     }
 
-    if (this.props.log.hr) {
+    if (this.props.log.get("hr")) {
+      const zones = this.props.log.get("hrzones");
+
       hrZones = (
         <div className="panel panel-default">
           <div className="panel-heading">
@@ -59,33 +66,33 @@ export default class LogDetails extends React.Component {
             <li className="list-group-item">
               <div className="progress log-heart-rate-bar">
                 {["none", "easy", "fatburning", "aerobic", "anaerobic", "red"].map((zone) => {
-                  return <div key={zone} className={`progress-bar heart-rate-${zone}`} style={{ width: `${this.props.log.hrzones[zone]}%` }}></div>;
+                  return <div key={zone} className={`progress-bar heart-rate-${zone}`} style={{ width: `${zones.get(zone)}%` }}></div>;
                 })}
               </div>
             </li>
             <li className="list-group-item text-heart-rate-red">
               <span title="≥175">Red</span>
-              <span className="pull-right">{Math.round(this.props.log.hrzones.red)}%</span>
+              <span className="pull-right">{Math.round(zones.get("red"))}%</span>
             </li>
             <li className="list-group-item text-heart-rate-anaerobic">
               <span title="164–175">Anaerobic</span>
-              <span className="pull-right">{Math.round(this.props.log.hrzones.anaerobic)}%</span>
+              <span className="pull-right">{Math.round(zones.get("anaerobic"))}%</span>
             </li>
             <li className="list-group-item text-heart-rate-aerobic">
               <span title="153–164">Aerobic</span>
-              <span className="pull-right">{Math.round(this.props.log.hrzones.aerobic)}%</span>
+              <span className="pull-right">{Math.round(zones.get("aerobic"))}%</span>
             </li>
             <li className="list-group-item text-heart-rate-fatburning">
               <span title="142–153">Fat Burning</span>
-              <span className="pull-right">{Math.round(this.props.log.hrzones.fatburning)}%</span>
+              <span className="pull-right">{Math.round(zones.get("fatburning"))}%</span>
             </li>
             <li className="list-group-item text-heart-rate-easy">
               <span title="131–142">Easy</span>
-              <span className="pull-right">{Math.round(this.props.log.hrzones.easy)}%</span>
+              <span className="pull-right">{Math.round(zones.get("easy"))}%</span>
             </li>
             <li className="list-group-item text-heart-rate-none">
               <span>None</span>
-              <span className="pull-right">{Math.round(this.props.log.hrzones.none)}%</span>
+              <span className="pull-right">{Math.round(zones.get("none"))}%</span>
             </li>
           </ul>
         </div>
@@ -93,16 +100,16 @@ export default class LogDetails extends React.Component {
     }
 
     let details = [
-      ["Start", this.props.log.start],
-      ["End", this.props.log.end],
-      ["Duration", this.props.log.duration],
-      ["Distance", this.props.log.distance],
-      ["∅ Speed", this.props.log.speed],
-      ["∅ Pace", this.props.log.pace],
+      ["Start", this.props.log.get("start")],
+      ["End", this.props.log.get("end")],
+      ["Duration", this.props.log.get("duration")],
+      ["Distance", this.props.log.get("distance")],
+      ["∅ Speed", this.props.log.get("speed")],
+      ["∅ Pace", this.props.log.get("pace")],
     ];
 
-    if (this.props.log.hr) {
-      details.push(["∅ HR", this.props.log.hr]);
+    if (this.props.log.get("hr")) {
+      details.push(["∅ HR", this.props.log.get("hr")]);
     }
 
     let dlElements = [];
@@ -126,9 +133,9 @@ export default class LogDetails extends React.Component {
         {tags}
         {hrZones}
         <ul className="list-group">
-          <li className="list-group-item"><a href={`/logs/${this.props.log.id}/download`}>Download .gpx file</a></li>
+          <li className="list-group-item"><a href={`/logs/${this.props.log.get("id")}/download`}>Download .gpx file</a></li>
           <li className="list-group-item"><a href="#edit" onClick={this.onEditClick.bind(this)}>Edit</a></li>
-          <li className="list-group-item"><a href={`/logs/${this.props.log.id}`} data-method="delete">Delete</a></li>
+          <li className="list-group-item"><a href={`/logs/${this.props.log.get("id")}`} data-method="delete">Delete</a></li>
         </ul>
       </div>
     );

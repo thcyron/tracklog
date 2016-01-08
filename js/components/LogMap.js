@@ -21,11 +21,11 @@ export default class DocMap extends React.Component {
       this.map.removeLayer(this.multiPolyline);
     }
 
-    const latlngs = this.props.log.tracks.map((track) => {
+    const latlngs = this.props.log.get("tracks").map((track) => {
       return track.map((point) => {
-        return [point.lat, point.lon];
+        return [point.get("lat"), point.get("lon")];
       });
-    });
+    }).toJS();
 
     this.multiPolyline = Leaflet.multiPolyline(latlngs, { color: "red" });
     this.multiPolyline.addTo(this.map);
