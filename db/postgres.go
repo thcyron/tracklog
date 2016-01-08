@@ -445,7 +445,33 @@ func (d *Postgres) UpdateLog(log *tracklog.Log) error {
 		return err
 	}
 
+	if err := d.replaceLogTags(tx, log); err != nil {
+		tx.Rollback()
+		return err
+	}
+
 	return tx.Commit()
+}
+
+func (d *Postgres) replaceLogTags(tx *sql.Tx, log *tracklog.Log) error {
+	_, err := tx.Exec(`DELETE FROM "log_tag" WHERE "log_id" = $1`, log.ID)
+	if err != nil {
+		return err
+	}
+
+	for _, tag := range log.Tags {
+		query, args, _ := sqlbuilder.Postgres.Insert().
+			Into("log_tag").
+			Set("log_id", log.ID).
+			Set("tag", tag).
+			Build()
+		_, err = tx.Exec(query, args...)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func (d *Postgres) DeleteLog(log *tracklog.Log) error {

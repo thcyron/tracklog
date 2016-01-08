@@ -320,7 +320,8 @@ func (s *Server) HandleDownloadLog(w http.ResponseWriter, r *http.Request) {
 }
 
 type patchLogRequest struct {
-	Name string `json:"name"`
+	Name string   `json:"name"`
+	Tags []string `json:"tags"`
 }
 
 func (s *Server) HandlePatchLog(w http.ResponseWriter, r *http.Request) {
@@ -352,6 +353,9 @@ func (s *Server) HandlePatchLog(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 	log.Name = req.Name
+	if req.Tags != nil {
+		log.Tags = req.Tags
+	}
 
 	if err := s.db.UpdateLog(log); err != nil {
 		panic(err)
