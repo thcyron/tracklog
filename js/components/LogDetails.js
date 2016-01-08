@@ -134,8 +134,14 @@ export default class LogDetails extends React.Component {
         {hrZones}
         <ul className="list-group">
           <li className="list-group-item"><a href={`/logs/${this.props.log.get("id")}/download`}>Download .gpx file</a></li>
-          <li className="list-group-item"><a href="#edit" onClick={this.onEditClick.bind(this)}>Edit</a></li>
-          <li className="list-group-item"><a href={`/logs/${this.props.log.get("id")}`} data-method="delete">Delete</a></li>
+          {(() => {
+            if (!this.props.editing) {
+              return [
+                <li key="edit" className="list-group-item"><a href="#edit" onClick={this.onEditClick.bind(this)}>Edit</a></li>,
+                <li key="delete" className="list-group-item"><a href={`/logs/${this.props.log.get("id")}`} data-method="delete">Delete</a></li>,
+              ];
+            }
+          })()}
         </ul>
       </div>
     );

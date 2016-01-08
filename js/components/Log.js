@@ -151,7 +151,7 @@ export default class Log extends React.Component {
             <LogMap log={this.state.log} />
           </div>
           <div className="col-md-3">
-            <LogDetails log={this.state.log} onEdit={this.onEdit.bind(this)} />
+            <LogDetails log={this.state.log} onEdit={this.onEdit.bind(this)} editing={this.state.editing} />
           </div>
         </div>
       </div>
