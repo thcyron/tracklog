@@ -4,7 +4,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import Leaflet from "leaflet";
 
-export default class DocMap extends React.Component {
+export default class LogMap extends React.Component {
   componentDidMount() {
     this.map = Leaflet.map(ReactDOM.findDOMNode(this));
     this.map.addLayer(Leaflet.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"));

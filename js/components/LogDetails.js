@@ -147,7 +147,3 @@ export default class LogDetails extends React.Component {
     );
   }
 }
-
-export function renderLog(container, log) {
-  ReactDOM.render(<Log log={log} />, container);
-}
