@@ -6,6 +6,14 @@
 
 ![Log screenshot](doc/log.jpg)
 
+## Run Tracklog with Docker
+
+There’s a Docker image [thcyron/tracklog](https://hub.docker.com/r/thcyron/tracklog)
+for Tracklog. This image only contains the server and import binary, you have to
+bring your own Postgres server. You also have to provide a config file.
+
+    docker run -v /path/to/config.json:/etc/tracklog.json -p 8080:8080 thcyron/tracklog
+
 ## Installation
 
 First, make sure you have Go and Node.js installed.
