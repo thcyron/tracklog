@@ -1,78 +1,97 @@
 "use strict";
 
-import $ from "../node_modules/jquery/dist/jquery";
 import "whatwg-fetch";
 
 import {uploadLogs} from "./upload";
 import {renderLog} from "./components/Log";
 
-$(() => {
-  $("a[data-method]").on("click", (event) => {
-    event.preventDefault();
-    const $a = $(event.target);
-    $("<form>")
-      .attr("method", "POST")
-      .attr("action", $a.attr("href"))
-      .append($("<input>").attr({
-        type: "hidden",
-        name: "_csrf",
-        value: tracklog.csrfToken,
-      }))
-      .append($("<input>").attr({
-        type: "hidden",
-        name: "_method",
-        value: $a.attr("data-method").toUpperCase(),
-      }))
-      .hide()
-      .appendTo(document.body)
-      .submit();
-  });
-
-  $(".logs-upload-button").on("click", (event) => {
-    event.preventDefault();
-
-    const $input = $("<input>")
-      .attr("type", "file")
-      .prop("multiple", true)
-      .hide()
-      .appendTo(document.body)
-      .trigger("click");
-
-    $input.on("change", (event) => {
-      const input = event.target;
-      const files = input.files;
-
-      let filesArray = [];
-      for (let i = 0; i < files.length; i++) {
-        filesArray.push(files[i]);
+document.addEventListener("DOMContentLoaded", () => {
+  const nodes = document.querySelectorAll("a[data-method]");
+  for (let i = 0; i < nodes.length; i++) {
+    const node = nodes[i];
+    node.addEventListener("click", (event) => {
+      event.preventDefault();
+      const a = event.target;
+      const method = a.attributes.getNamedItem("data-method").value;
+      if (method) {
+        createForm(a.href, method).submit();
       }
+    });
+  }
+});
 
-      uploadLogs({
-        files: filesArray,
-      })
-      .then((results) => {
-        if (results.length == 1) {
-          const id = results[0].id;
-          window.location = `/logs/${id}`;
-        } else {
-          window.location = "/logs";
+function createForm(href, method) {
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = href;
+
+  const methodField = document.createElement("input");
+  methodField.type = "hidden";
+  methodField.name = "_method";
+  methodField.value = method.toUpperCase();
+  form.appendChild(methodField);
+
+  const csrfField = document.createElement("input");
+  csrfField.type = "hidden";
+  csrfField.name = "_csrf";
+  csrfField.value = tracklog.csrfToken;
+  form.appendChild(csrfField);
+
+  return form;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const nodes = document.querySelectorAll("form");
+  for (let i = 0; i < nodes.length; i++) {
+    const node = nodes[i];
+    node.addEventListener("submit", (event) => {
+      const form = event.target;
+      const csrfField = document.createElement("input");
+      csrfField.type = "hidden";
+      csrfField.name = "_csrf";
+      csrfField.value = tracklog.csrfToken;
+      form.appendChild(csrfField);
+    });
+  }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const nodes = document.querySelectorAll(".logs-upload-button");
+  for (let i = 0; i < nodes.length; i++) {
+    const node = nodes[i];
+    node.addEventListener("click", () => {
+      const fileInput = document.createElement("input");
+      fileInput.type = "file";
+      fileInput.multiple = true;
+
+      fileInput.addEventListener("change", (event) => {
+        const input = event.target;
+        const files = input.files;
+
+        let filesArray = [];
+        for (let i = 0; i < files.length; i++) {
+          filesArray.push(files[i]);
         }
-      })
-      .catch((err) => {
-        alert(err);
-      });
-    });
-  });
 
-  $("form").on("submit", (event) => {
-    const $input = $("<input>").attr({
-      type: "hidden",
-      name: "_csrf",
-      value: tracklog.csrfToken,
+        uploadLogs({
+          files: filesArray,
+        })
+        .then((results) => {
+          if (results.length == 1) {
+            const id = results[0].id;
+            window.location = `/logs/${id}`;
+          } else {
+            window.location = "/logs";
+          }
+        })
+        .catch((err) => {
+          alert(err);
+        });
+      });
+
+      fileInput.click();
     });
-    $(event.target).append($input);
-    return true;
-  });
+  }
 });
 
 window.tracklog = {
