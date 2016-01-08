@@ -2,9 +2,8 @@
 
 **Tracklog** is a web application for managing GPX track files written in Go.
 
-![Logs screenshot](doc/logs.jpg)
-
-![Log screenshot](doc/log.jpg)
+<a href="https://raw.githubusercontent.com/thcyron/tracklog/master/doc/logs.jpg"><img src="doc/logs-thumbnail.jpg" width="300"></a>
+<a href="https://raw.githubusercontent.com/thcyron/tracklog/master/doc/log.jpg"><img src="doc/log-thumbnail.jpg" width="300"></a>
 
 ## Run Tracklog with Docker
 
