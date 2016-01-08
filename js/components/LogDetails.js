@@ -20,8 +20,8 @@ export default class LogDetails extends React.Component {
   render() {
     let tags = "", hrZones = "";
 
-    if (this.props.log.get("tags").size > 0) {
-      tags = <LogTags log={this.props.log} />;
+    if (this.props.log.get("tags").size > 0 || this.props.editing) {
+      tags = <LogTags log={this.props.log} editing={this.props.editing} />;
     }
 
     if (this.props.log.get("hr")) {

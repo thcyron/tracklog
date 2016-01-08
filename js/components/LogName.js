@@ -2,28 +2,14 @@
 
 import React from "react";
 
+import Dispatcher from "../Dispatcher";
+
 export default class LogName extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      name: props.log.get("name"),
-    };
-  }
-
-  componentWillReceiveProps(props) {
-    this.state = {
-      name: props.log.get("name"),
-    };
-  }
-
-  onChange(event) {
-    const name = event.target.value;
-    this.setState({ name: name });
-
-    if (this.props.onChange) {
-      this.props.onChange(name);
-    }
+  _onChange(event) {
+    Dispatcher.dispatch({
+      type: "log-set-name",
+      name: event.target.value,
+    });
   }
 
   render() {
@@ -32,8 +18,8 @@ export default class LogName extends React.Component {
         <input
           type="text"
           className="log-name-edit-field form-control"
-          value={this.state.name}
-          onChange={this.onChange.bind(this)} />
+          value={this.props.log.get("name")}
+          onChange={this._onChange.bind(this)} />
       );
     }
 

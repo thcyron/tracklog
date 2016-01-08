@@ -8,6 +8,10 @@ import LogMap from "./LogMap";
 import LogDetails from "./LogDetails";
 import LogName from "./LogName";
 
+import Dispatcher from "../Dispatcher";
+
+import LogStore from "../stores/LogStore";
+
 export default class Log extends React.Component {
   constructor(props) {
     super(props);
@@ -16,6 +20,14 @@ export default class Log extends React.Component {
       log: props.log,
       editing: false,
     };
+
+    LogStore.init(this.props.log);
+
+    LogStore.on("change", () => {
+      this.setState({
+        log: LogStore.log,
+      });
+    });
   }
 
   onEdit() {
@@ -27,17 +39,13 @@ export default class Log extends React.Component {
     }
   }
 
-  onNameChange(name: string) {
-    this.setState({
-      log: this.state.log.set("name", name),
-    });
-  }
-
   onSave(event) {
     this.setState({
       editing: false,
       oldLog: null,
     });
+
+    const tags = this.state.log.get("tags").filter(tag => tag.length > 0);
 
     window.fetch(`/logs/${this.state.log.get("id")}`, {
       method: "PATCH",
@@ -48,6 +56,7 @@ export default class Log extends React.Component {
       },
       body: JSON.stringify({
         "name": this.state.log.get("name"),
+        "tags": tags.toJSON(),
       }),
     })
     .then((data) => {
@@ -77,7 +86,7 @@ export default class Log extends React.Component {
       return (
         <div className="row">
           <div className="col-md-9">
-            <LogName log={this.state.log} editing={this.state.editing} onChange={this.onNameChange.bind(this)} />
+            <LogName log={this.state.log} editing={this.state.editing} />
           </div>
           <div className="col-md-3">
             <div className="row">
