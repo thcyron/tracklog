@@ -25,12 +25,21 @@ type Server struct {
 	db          db.DB
 	handler     http.Handler
 	csrfHandler func(http.Handler) http.Handler
+	tmpl        *template.Template
 }
 
-func New(config *tracklog.Config, db db.DB) *Server {
+func New(config *tracklog.Config, db db.DB) (*Server, error) {
 	s := &Server{
 		config: config,
 		db:     db,
+	}
+
+	if !config.Server.Development {
+		tmpl, err := s.loadTemplates()
+		if err != nil {
+			return nil, err
+		}
+		s.tmpl = tmpl
 	}
 
 	n := negroni.Classic()
@@ -65,7 +74,7 @@ func New(config *tracklog.Config, db db.DB) *Server {
 	n.UseHandler(r)
 
 	s.handler = n
-	return s
+	return s, nil
 }
 
 func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -96,6 +105,10 @@ func (s *Server) userAuthMiddleware(w http.ResponseWriter, r *http.Request, next
 	next(w, r)
 }
 
+func (s *Server) loadTemplates() (*template.Template, error) {
+	return template.ParseGlob(path.Join(DataDir, "templates/*.html"))
+}
+
 type renderData struct {
 	Title      string
 	ActiveTab  string
@@ -109,13 +122,16 @@ type renderData struct {
 	Data       interface{}
 }
 
-func (server *Server) render(w http.ResponseWriter, r *http.Request, name string) {
+func (s *Server) render(w http.ResponseWriter, r *http.Request, name string) {
 	ctx := NewContext(r, w)
 
-	// TODO(thcyron): Load templates initially at server startup, not on every request.
-	tmpl, err := template.ParseGlob(path.Join(DataDir, "templates/*.html"))
-	if err != nil {
-		panic(err)
+	tmpl := s.tmpl
+	if tmpl == nil {
+		t, err := s.loadTemplates()
+		if err != nil {
+			panic(err)
+		}
+		tmpl = t
 	}
 
 	data := renderData{

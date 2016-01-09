@@ -37,7 +37,11 @@ func main() {
 		die("cannot open database: %s", err)
 	}
 
-	s := server.New(config, DB)
+	s, err := server.New(config, DB)
+	if err != nil {
+		die("%s", err)
+	}
+
 	log.Fatalln(http.ListenAndServe(config.Server.ListenAddress, s))
 }
 
