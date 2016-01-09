@@ -84,7 +84,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 type HandlerFunc func(w http.ResponseWriter, r *http.Request)
 
-func (server *Server) wrapHandler(handler HandlerFunc) httprouter.Handle {
+func (s *Server) wrapHandler(handler HandlerFunc) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		ctx := NewContext(r, w)
 		ctx.SetStart(time.Now())
