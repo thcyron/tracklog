@@ -11,7 +11,7 @@
   </head>
   <body>
     <nav class="navbar navbar-default navbar-static-top">
-      <div class="container">
+      <div class="container-fluid">
         <div class="navbar-header">
           <a class="navbar-brand" href="/">Tracklog</a>
         </div>
@@ -32,7 +32,7 @@
     </nav>
     {{with .Breadcrumb.Items}}
       <div class="breadcrumb-container">
-        <div class="container">
+        <div class="container-fluid">
           <ol class="breadcrumb">
             {{range .}}
               {{if .Active}}
@@ -45,11 +45,11 @@
         </div>
       </div>
     {{end}}
-    <div class="container">
+    <div class="container-fluid">
       {{.Content}}
     </div>
     <footer id="footer">
-      <div class="container">
+      <div class="container-fluid">
         <ul class="list-inline">
           <li>Tracklog {{.Version}}</li>
           {{with .Runtime}}
