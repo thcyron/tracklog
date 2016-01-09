@@ -142,8 +142,10 @@ func (s *Server) render(w http.ResponseWriter, r *http.Request, name string) {
 		CSRFToken:  csrf.Token(r),
 		CSRFField:  csrf.TemplateField(r),
 		Version:    tracklog.Version,
-		Runtime:    fmt.Sprintf("%.0fms", time.Now().Sub(ctx.Start()).Seconds()*1000),
 		Data:       ctx.Data(),
+	}
+	if s.config.Server.Development {
+		data.Runtime = fmt.Sprintf("%.0fms", time.Now().Sub(ctx.Start()).Seconds()*1000)
 	}
 
 	if ctx.NoLayout() {

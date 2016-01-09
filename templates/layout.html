@@ -52,7 +52,9 @@
       <div class="container">
         <ul class="list-inline">
           <li>Tracklog {{.Version}}</li>
-          <li>Runtime: {{.Runtime}}</li>
+          {{with .Runtime}}
+            <li>Runtime: {{.}}</li>
+          {{end}}
         </ul>
       </div>
     </footer>
