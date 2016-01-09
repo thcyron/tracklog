@@ -1,6 +1,9 @@
 body {
-  padding-top: $navbar-height + 1px;
   padding-bottom: 20px;
+}
+
+.navbar {
+  margin-bottom: 0;
 }
 
 .navbar-brand {
