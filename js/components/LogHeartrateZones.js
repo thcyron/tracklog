@@ -9,11 +9,12 @@ export default class LogHeartrateZones extends React.Component {
   }
 
   set _canvas(canvas) {
-    const ctx = canvas.getContext("2d");
-    this._chart = new Chart(ctx).Doughnut(this.data, {
-      animation: false,
-      tooltipTemplate: "<%= label %>: <%= value %>%",
-    });
+    if (canvas != null) {
+      new Chart(canvas.getContext("2d")).Doughnut(this.data, {
+        animation: false,
+        tooltipTemplate: "<%= label %>: <%= value %>%",
+      });
+    }
   }
 
   get data() {
