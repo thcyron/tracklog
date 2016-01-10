@@ -8,7 +8,7 @@ export default class LogHeartrateZones extends React.Component {
     super(props);
   }
 
-  set _canvas(canvas) {
+  _createChart(canvas) {
     if (canvas != null) {
       new Chart(canvas.getContext("2d")).Doughnut(this.data, {
         animation: false,
@@ -59,7 +59,7 @@ export default class LogHeartrateZones extends React.Component {
           <h4 className="panel-title">Heart Rate Zones</h4>
         </div>
         <div className="panel-body text-center">
-          <canvas width="220" height="220" ref={(c) => this._canvas = c}></canvas>
+          <canvas width="220" height="220" ref={this._createChart.bind(this)}></canvas>
         </div>
       </div>
     );
