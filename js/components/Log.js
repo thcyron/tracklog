@@ -85,10 +85,10 @@ export default class Log extends React.Component {
     if (this.state.editing) {
       return (
         <div className="row">
-          <div className="col-sm-9">
+          <div className="col-md-9">
             <LogName log={this.state.log} editing={this.state.editing} />
           </div>
-          <div className="col-sm-3">
+          <div className="col-md-3">
             <div className="row">
               <div className="col-sm-6">
                 <button className="btn btn-block btn-success" onClick={this.onSave.bind(this)}>Save</button>
@@ -104,7 +104,7 @@ export default class Log extends React.Component {
 
     return (
       <div className="row">
-        <div className="col-sm-12">
+        <div className="col-md-12">
           <LogName log={this.state.log} editing={this.state.editing} />
         </div>
       </div>
