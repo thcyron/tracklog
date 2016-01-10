@@ -25,6 +25,7 @@
     "bootstrap-sass": "^3.3.6",
     "leaflet": "^0.7.7",
     "whatwg-fetch": "^0.10.1",
-    "immutable": "^3.7.6"
+    "immutable": "^3.7.6",
+    "chart.js": "^1.0.2"
   }
 }

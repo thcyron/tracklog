@@ -3,6 +3,7 @@
 import React from "react";
 
 import LogTags from "./LogTags";
+import LogHeartrateZones from "./LogHeartrateZones";
 
 export default class LogDetails extends React.Component {
   constructor(props) {
@@ -26,47 +27,7 @@ export default class LogDetails extends React.Component {
 
     if (this.props.log.get("hr")) {
       const zones = this.props.log.get("hrzones");
-
-      hrZones = (
-        <div className="panel panel-default">
-          <div className="panel-heading">
-            <h4 className="panel-title">Heart Rate</h4>
-          </div>
-          <ul className="list-group">
-            <li className="list-group-item">
-              <div className="progress log-heart-rate-bar">
-                {["none", "easy", "fatburning", "aerobic", "anaerobic", "red"].map((zone) => {
-                  return <div key={zone} className={`progress-bar heart-rate-${zone}`} style={{ width: `${zones.get(zone)}%` }}></div>;
-                })}
-              </div>
-            </li>
-            <li className="list-group-item text-heart-rate-red">
-              <span title="≥175">Red</span>
-              <span className="pull-right">{Math.round(zones.get("red"))}%</span>
-            </li>
-            <li className="list-group-item text-heart-rate-anaerobic">
-              <span title="164–175">Anaerobic</span>
-              <span className="pull-right">{Math.round(zones.get("anaerobic"))}%</span>
-            </li>
-            <li className="list-group-item text-heart-rate-aerobic">
-              <span title="153–164">Aerobic</span>
-              <span className="pull-right">{Math.round(zones.get("aerobic"))}%</span>
-            </li>
-            <li className="list-group-item text-heart-rate-fatburning">
-              <span title="142–153">Fat Burning</span>
-              <span className="pull-right">{Math.round(zones.get("fatburning"))}%</span>
-            </li>
-            <li className="list-group-item text-heart-rate-easy">
-              <span title="131–142">Easy</span>
-              <span className="pull-right">{Math.round(zones.get("easy"))}%</span>
-            </li>
-            <li className="list-group-item text-heart-rate-none">
-              <span>None</span>
-              <span className="pull-right">{Math.round(zones.get("none"))}%</span>
-            </li>
-          </ul>
-        </div>
-      );
+      hrZones = <LogHeartrateZones zones={zones} />;
     }
 
     let details = [
