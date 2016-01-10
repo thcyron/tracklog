@@ -6,10 +6,6 @@ import LogTags from "./LogTags";
 import LogHeartrateZones from "./LogHeartrateZones";
 
 export default class LogDetails extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   onEditClick(event) {
     event.preventDefault();
 

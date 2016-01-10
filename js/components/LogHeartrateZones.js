@@ -4,10 +4,6 @@ import React from "react";
 import Chart from "chart.js";
 
 export default class LogHeartrateZones extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   _createChart(canvas) {
     if (canvas != null) {
       new Chart(canvas.getContext("2d")).Doughnut(this.data, {
