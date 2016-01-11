@@ -14,9 +14,9 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/julienschmidt/httprouter"
 	"github.com/thcyron/tracklog"
-	"github.com/thcyron/tracklog/config"
-	"github.com/thcyron/tracklog/db"
-	"github.com/thcyron/tracklog/models"
+	"github.com/thcyron/tracklog/pkg/config"
+	"github.com/thcyron/tracklog/pkg/db"
+	"github.com/thcyron/tracklog/pkg/models"
 )
 
 // DataDir points to the directory where the public/ and templates/ directories are.

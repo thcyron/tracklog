@@ -8,9 +8,9 @@ import (
 	"path"
 	"strings"
 
-	"github.com/thcyron/tracklog/config"
-	"github.com/thcyron/tracklog/db"
-	"github.com/thcyron/tracklog/models"
+	"github.com/thcyron/tracklog/pkg/config"
+	"github.com/thcyron/tracklog/pkg/db"
+	"github.com/thcyron/tracklog/pkg/models"
 )
 
 var (

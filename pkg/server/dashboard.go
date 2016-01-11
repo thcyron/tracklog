@@ -3,7 +3,7 @@ package server
 import (
 	"net/http"
 
-	"github.com/thcyron/tracklog/utils"
+	"github.com/thcyron/tracklog/pkg/utils"
 )
 
 const dashboardRecentLogsCount = 5

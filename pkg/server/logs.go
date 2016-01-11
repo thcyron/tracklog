@@ -8,9 +8,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/thcyron/tracklog/heartrate"
-	"github.com/thcyron/tracklog/models"
-	"github.com/thcyron/tracklog/utils"
+	"github.com/thcyron/tracklog/pkg/heartrate"
+	"github.com/thcyron/tracklog/pkg/models"
+	"github.com/thcyron/tracklog/pkg/utils"
 )
 
 const logTimeFormat = "2006-01-02 15:04:05"

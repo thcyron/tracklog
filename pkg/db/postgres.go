@@ -6,7 +6,7 @@ import (
 
 	_ "github.com/lib/pq"
 	"github.com/thcyron/sqlbuilder"
-	"github.com/thcyron/tracklog/models"
+	"github.com/thcyron/tracklog/pkg/models"
 )
 
 type Postgres struct {

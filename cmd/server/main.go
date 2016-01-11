@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/thcyron/tracklog/config"
-	"github.com/thcyron/tracklog/db"
-	"github.com/thcyron/tracklog/server"
+	"github.com/thcyron/tracklog/pkg/config"
+	"github.com/thcyron/tracklog/pkg/db"
+	"github.com/thcyron/tracklog/pkg/server"
 )
 
 var (

@@ -3,7 +3,7 @@ package heartrate
 import (
 	"time"
 
-	"github.com/thcyron/tracklog/models"
+	"github.com/thcyron/tracklog/pkg/models"
 )
 
 type Summary struct {
