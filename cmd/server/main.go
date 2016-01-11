@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/thcyron/tracklog"
+	"github.com/thcyron/tracklog/config"
 	"github.com/thcyron/tracklog/db"
 	"github.com/thcyron/tracklog/server"
 )
@@ -24,25 +24,25 @@ func main() {
 		die("cannot open config file: %s", err)
 	}
 	defer f.Close()
-	config, err := tracklog.ReadConfig(f)
+	conf, err := config.Read(f)
 	if err != nil {
 		die("cannot read config file: %s", err)
 	}
 
-	DB := db.Driver(config.DB.Driver)
+	DB := db.Driver(conf.DB.Driver)
 	if DB == nil {
-		die("unknown database driver %s", config.DB.Driver)
+		die("unknown database driver %s", conf.DB.Driver)
 	}
-	if err := DB.Open(config.DB.DSN); err != nil {
+	if err := DB.Open(conf.DB.DSN); err != nil {
 		die("cannot open database: %s", err)
 	}
 
-	s, err := server.New(config, DB)
+	s, err := server.New(conf, DB)
 	if err != nil {
 		die("%s", err)
 	}
 
-	log.Fatalln(http.ListenAndServe(config.Server.ListenAddress, s))
+	log.Fatalln(http.ListenAndServe(conf.Server.ListenAddress, s))
 }
 
 func die(format string, args ...interface{}) {

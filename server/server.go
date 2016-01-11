@@ -14,6 +14,7 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/julienschmidt/httprouter"
 	"github.com/thcyron/tracklog"
+	"github.com/thcyron/tracklog/config"
 	"github.com/thcyron/tracklog/db"
 	"github.com/thcyron/tracklog/models"
 )
@@ -22,20 +23,20 @@ import (
 var DataDir = "."
 
 type Server struct {
-	config      *tracklog.Config
+	config      *config.Config
 	db          db.DB
 	handler     http.Handler
 	csrfHandler func(http.Handler) http.Handler
 	tmpl        *template.Template
 }
 
-func New(config *tracklog.Config, db db.DB) (*Server, error) {
+func New(conf *config.Config, db db.DB) (*Server, error) {
 	s := &Server{
-		config: config,
+		config: conf,
 		db:     db,
 	}
 
-	if !config.Server.Development {
+	if !s.config.Server.Development {
 		tmpl, err := s.loadTemplates()
 		if err != nil {
 			return nil, err

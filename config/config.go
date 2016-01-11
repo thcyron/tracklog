@@ -1,4 +1,4 @@
-package tracklog
+package config
 
 import (
 	"encoding/json"
@@ -18,7 +18,7 @@ type Config struct {
 	} `json:"db"`
 }
 
-func ReadConfig(r io.Reader) (*Config, error) {
+func Read(r io.Reader) (*Config, error) {
 	config := new(Config)
 	if err := json.NewDecoder(r).Decode(&config); err != nil {
 		return nil, err
