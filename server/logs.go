@@ -10,6 +10,7 @@ import (
 
 	"github.com/thcyron/tracklog"
 	"github.com/thcyron/tracklog/heartrate"
+	"github.com/thcyron/tracklog/models"
 )
 
 const logTimeFormat = "2006-01-02 15:04:05"
@@ -164,7 +165,7 @@ func (s *Server) HandlePostLog(w http.ResponseWriter, r *http.Request) {
 	}
 
 	name := strings.TrimSuffix(req.Filename, ".gpx")
-	log, err := tracklog.NewLog(name, []byte(req.GPX))
+	log, err := models.NewLog(name, []byte(req.GPX))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return

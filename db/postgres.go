@@ -6,7 +6,7 @@ import (
 
 	_ "github.com/lib/pq"
 	"github.com/thcyron/sqlbuilder"
-	"github.com/thcyron/tracklog"
+	"github.com/thcyron/tracklog/models"
 )
 
 type Postgres struct {
@@ -25,8 +25,8 @@ func (d *Postgres) Open(dsn string) error {
 	return nil
 }
 
-func (d *Postgres) UserByID(id int) (*tracklog.User, error) {
-	user := new(tracklog.User)
+func (d *Postgres) UserByID(id int) (*models.User, error) {
+	user := new(models.User)
 
 	query, args, dest := sqlbuilder.Postgres.Select().
 		From("user").
@@ -46,8 +46,8 @@ func (d *Postgres) UserByID(id int) (*tracklog.User, error) {
 	return user, nil
 }
 
-func (d *Postgres) UserByUsername(username string) (*tracklog.User, error) {
-	user := new(tracklog.User)
+func (d *Postgres) UserByUsername(username string) (*models.User, error) {
+	user := new(models.User)
 
 	query, args, dest := sqlbuilder.Postgres.Select().
 		From("user").
@@ -67,7 +67,7 @@ func (d *Postgres) UserByUsername(username string) (*tracklog.User, error) {
 	return user, nil
 }
 
-func (d *Postgres) RecentUserLogs(user *tracklog.User, count int) ([]*tracklog.Log, error) {
+func (d *Postgres) RecentUserLogs(user *models.User, count int) ([]*models.Log, error) {
 	tx, err := d.db.Begin()
 	if err != nil {
 		return nil, err
@@ -75,8 +75,8 @@ func (d *Postgres) RecentUserLogs(user *tracklog.User, count int) ([]*tracklog.L
 	defer tx.Rollback() // read-only transaction
 
 	var (
-		log  tracklog.Log
-		logs []*tracklog.Log
+		log  models.Log
+		logs []*models.Log
 	)
 
 	query, args, dest := sqlbuilder.Postgres.Select().
@@ -101,7 +101,7 @@ func (d *Postgres) RecentUserLogs(user *tracklog.User, count int) ([]*tracklog.L
 		if err := rows.Scan(dest...); err != nil {
 			return nil, err
 		}
-		l := new(tracklog.Log)
+		l := new(models.Log)
 		*l = log
 		logs = append(logs, l)
 	}
@@ -118,7 +118,7 @@ func (d *Postgres) RecentUserLogs(user *tracklog.User, count int) ([]*tracklog.L
 	return logs, nil
 }
 
-func (d *Postgres) UserLogYears(user *tracklog.User) ([]int, error) {
+func (d *Postgres) UserLogYears(user *models.User) ([]int, error) {
 	var (
 		years []int
 		year  int
@@ -147,14 +147,14 @@ func (d *Postgres) UserLogYears(user *tracklog.User) ([]int, error) {
 	return years, nil
 }
 
-func (d *Postgres) UserLogByID(user *tracklog.User, id int) (*tracklog.Log, error) {
+func (d *Postgres) UserLogByID(user *models.User, id int) (*models.Log, error) {
 	tx, err := d.db.Begin()
 	if err != nil {
 		return nil, err
 	}
 	defer tx.Rollback() // read-only transaction
 
-	log := new(tracklog.Log)
+	log := new(models.Log)
 
 	query, args, dest := sqlbuilder.Postgres.Select().
 		From("log").
@@ -187,10 +187,10 @@ func (d *Postgres) UserLogByID(user *tracklog.User, id int) (*tracklog.Log, erro
 	return log, nil
 }
 
-func (d *Postgres) getLogTracks(tx *sql.Tx, log *tracklog.Log) error {
+func (d *Postgres) getLogTracks(tx *sql.Tx, log *models.Log) error {
 	var (
-		track  tracklog.Track
-		tracks []*tracklog.Track
+		track  models.Track
+		tracks []*models.Track
 	)
 
 	query, args, dest := sqlbuilder.Postgres.Select().
@@ -213,7 +213,7 @@ func (d *Postgres) getLogTracks(tx *sql.Tx, log *tracklog.Log) error {
 		if err := rows.Scan(dest...); err != nil {
 			return err
 		}
-		t := new(tracklog.Track)
+		t := new(models.Track)
 		*t = track
 		tracks = append(tracks, t)
 	}
@@ -231,10 +231,10 @@ func (d *Postgres) getLogTracks(tx *sql.Tx, log *tracklog.Log) error {
 	return nil
 }
 
-func (d *Postgres) getTrackPoints(tx *sql.Tx, track *tracklog.Track) error {
+func (d *Postgres) getTrackPoints(tx *sql.Tx, track *models.Track) error {
 	var (
-		point  tracklog.Point
-		points []*tracklog.Point
+		point  models.Point
+		points []*models.Point
 	)
 
 	query, args, dest := sqlbuilder.Postgres.Select().
@@ -257,7 +257,7 @@ func (d *Postgres) getTrackPoints(tx *sql.Tx, track *tracklog.Track) error {
 		if err := rows.Scan(dest...); err != nil {
 			return err
 		}
-		p := new(tracklog.Point)
+		p := new(models.Point)
 		*p = point
 		points = append(points, p)
 	}
@@ -269,7 +269,7 @@ func (d *Postgres) getTrackPoints(tx *sql.Tx, track *tracklog.Track) error {
 	return nil
 }
 
-func (d *Postgres) getLogTags(tx *sql.Tx, log *tracklog.Log) error {
+func (d *Postgres) getLogTags(tx *sql.Tx, log *models.Log) error {
 	var (
 		tag  string
 		tags []string
@@ -298,7 +298,7 @@ func (d *Postgres) getLogTags(tx *sql.Tx, log *tracklog.Log) error {
 	return nil
 }
 
-func (d *Postgres) UserLogsByYear(user *tracklog.User, year int) ([]*tracklog.Log, error) {
+func (d *Postgres) UserLogsByYear(user *models.User, year int) ([]*models.Log, error) {
 	tx, err := d.db.Begin()
 	if err != nil {
 		return nil, err
@@ -306,8 +306,8 @@ func (d *Postgres) UserLogsByYear(user *tracklog.User, year int) ([]*tracklog.Lo
 	defer tx.Rollback() // read-only transaction
 
 	var (
-		log  tracklog.Log
-		logs []*tracklog.Log
+		log  models.Log
+		logs []*models.Log
 	)
 
 	query, args, dest := sqlbuilder.Postgres.Select().
@@ -333,7 +333,7 @@ func (d *Postgres) UserLogsByYear(user *tracklog.User, year int) ([]*tracklog.Lo
 			rows.Close()
 			return nil, err
 		}
-		l := new(tracklog.Log)
+		l := new(models.Log)
 		*l = log
 		logs = append(logs, l)
 	}
@@ -350,7 +350,7 @@ func (d *Postgres) UserLogsByYear(user *tracklog.User, year int) ([]*tracklog.Lo
 	return logs, nil
 }
 
-func (d *Postgres) AddUserLog(user *tracklog.User, log *tracklog.Log) error {
+func (d *Postgres) AddUserLog(user *models.User, log *models.Log) error {
 	tx, err := d.db.Begin()
 	if err != nil {
 		return err
@@ -382,7 +382,7 @@ func (d *Postgres) AddUserLog(user *tracklog.User, log *tracklog.Log) error {
 	return tx.Commit()
 }
 
-func (d *Postgres) addLogTrack(tx *sql.Tx, log *tracklog.Log, track *tracklog.Track) error {
+func (d *Postgres) addLogTrack(tx *sql.Tx, log *models.Log, track *models.Track) error {
 	var name *string
 	if track.Name != "" {
 		name = &track.Name
@@ -411,7 +411,7 @@ func (d *Postgres) addLogTrack(tx *sql.Tx, log *tracklog.Log, track *tracklog.Tr
 	return nil
 }
 
-func (d *Postgres) addTrackPoint(tx *sql.Tx, track *tracklog.Track, point *tracklog.Point) error {
+func (d *Postgres) addTrackPoint(tx *sql.Tx, track *models.Track, point *models.Point) error {
 	query, args, dest := sqlbuilder.Postgres.Insert().
 		Into("trackpoint").
 		Set("track_id", track.ID).
@@ -428,7 +428,7 @@ func (d *Postgres) addTrackPoint(tx *sql.Tx, track *tracklog.Track, point *track
 	return nil
 }
 
-func (d *Postgres) UpdateLog(log *tracklog.Log) error {
+func (d *Postgres) UpdateLog(log *models.Log) error {
 	tx, err := d.db.Begin()
 	if err != nil {
 		return nil
@@ -453,7 +453,7 @@ func (d *Postgres) UpdateLog(log *tracklog.Log) error {
 	return tx.Commit()
 }
 
-func (d *Postgres) replaceLogTags(tx *sql.Tx, log *tracklog.Log) error {
+func (d *Postgres) replaceLogTags(tx *sql.Tx, log *models.Log) error {
 	_, err := tx.Exec(`DELETE FROM "log_tag" WHERE "log_id" = $1`, log.ID)
 	if err != nil {
 		return err
@@ -474,7 +474,7 @@ func (d *Postgres) replaceLogTags(tx *sql.Tx, log *tracklog.Log) error {
 	return nil
 }
 
-func (d *Postgres) DeleteLog(log *tracklog.Log) error {
+func (d *Postgres) DeleteLog(log *models.Log) error {
 	tx, err := d.db.Begin()
 	if err != nil {
 		return err

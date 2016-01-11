@@ -10,6 +10,7 @@ import (
 
 	"github.com/thcyron/tracklog"
 	"github.com/thcyron/tracklog/db"
+	"github.com/thcyron/tracklog/models"
 )
 
 var (
@@ -59,7 +60,7 @@ func main() {
 	}
 }
 
-func importFile(DB db.DB, user *tracklog.User, fileName string) error {
+func importFile(DB db.DB, user *models.User, fileName string) error {
 	f, err := os.Open(fileName)
 	if err != nil {
 		return err
@@ -72,7 +73,7 @@ func importFile(DB db.DB, user *tracklog.User, fileName string) error {
 	}
 
 	name := strings.TrimSuffix(path.Base(fileName), ".gpx")
-	log, err := tracklog.NewLog(name, data)
+	log, err := models.NewLog(name, data)
 	if err != nil {
 		return err
 	}

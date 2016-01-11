@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/thcyron/tracklog"
+	"github.com/thcyron/tracklog/models"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -99,7 +99,7 @@ func (s *Server) redirectToSignIn(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/signin", http.StatusFound)
 }
 
-func (s *Server) userFromRequest(r *http.Request) (*tracklog.User, error) {
+func (s *Server) userFromRequest(r *http.Request) (*models.User, error) {
 	cookie, err := r.Cookie(tokenCookieName)
 	if err != nil {
 		return nil, nil

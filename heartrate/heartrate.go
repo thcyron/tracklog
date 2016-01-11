@@ -3,7 +3,7 @@ package heartrate
 import (
 	"time"
 
-	"github.com/thcyron/tracklog"
+	"github.com/thcyron/tracklog/models"
 )
 
 type Summary struct {
@@ -49,7 +49,7 @@ func (hr Heartrate) Zone() Zone {
 	}
 }
 
-func SummaryForLog(log *tracklog.Log) Summary {
+func SummaryForLog(log *models.Log) Summary {
 	summary := Summary{
 		Zones: make(map[Zone]int),
 	}

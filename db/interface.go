@@ -1,20 +1,20 @@
 package db
 
-import "github.com/thcyron/tracklog"
+import "github.com/thcyron/tracklog/models"
 
 type DB interface {
 	Open(dsn string) error
 
-	UserByID(id int) (*tracklog.User, error)
-	UserByUsername(username string) (*tracklog.User, error)
+	UserByID(id int) (*models.User, error)
+	UserByUsername(username string) (*models.User, error)
 
-	RecentUserLogs(user *tracklog.User, count int) ([]*tracklog.Log, error)
-	UserLogYears(user *tracklog.User) ([]int, error)
-	UserLogByID(user *tracklog.User, id int) (*tracklog.Log, error)
-	UserLogsByYear(user *tracklog.User, year int) ([]*tracklog.Log, error)
-	AddUserLog(user *tracklog.User, log *tracklog.Log) error
-	UpdateLog(log *tracklog.Log) error
-	DeleteLog(log *tracklog.Log) error
+	RecentUserLogs(user *models.User, count int) ([]*models.Log, error)
+	UserLogYears(user *models.User) ([]int, error)
+	UserLogByID(user *models.User, id int) (*models.Log, error)
+	UserLogsByYear(user *models.User, year int) ([]*models.Log, error)
+	AddUserLog(user *models.User, log *models.Log) error
+	UpdateLog(log *models.Log) error
+	DeleteLog(log *models.Log) error
 }
 
 func Driver(name string) DB {

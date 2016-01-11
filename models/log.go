@@ -1,4 +1,4 @@
-package tracklog
+package models
 
 import (
 	"bytes"
@@ -6,12 +6,6 @@ import (
 
 	"github.com/thcyron/gpx"
 )
-
-type User struct {
-	ID       int
-	Username string
-	Password string
-}
 
 type Log struct {
 	ID       int
@@ -24,36 +18,6 @@ type Log struct {
 	GPX      string
 	Tracks   []*Track
 	Tags     []string
-}
-
-type Track struct {
-	ID       int
-	LogID    int
-	Name     string
-	Start    time.Time
-	End      time.Time
-	Duration uint
-	Distance uint
-	Points   []*Point
-}
-
-type Point struct {
-	ID        int
-	TrackID   int
-	Latitude  float64
-	Longitude float64
-	Time      time.Time
-	Elevation float64
-	Heartrate uint
-}
-
-// Speed returns the speed in meters per second.
-func (log *Log) Speed() float64 {
-	sec := log.Duration
-	if sec == 0 {
-		return 0
-	}
-	return float64(log.Distance) / float64(sec)
 }
 
 func NewLog(name string, data []byte) (*Log, error) {
@@ -92,18 +56,11 @@ func NewLog(name string, data []byte) (*Log, error) {
 	return log, nil
 }
 
-func NewPoint(point gpx.Point) *Point {
-	p := &Point{
-		Latitude:  point.Latitude,
-		Longitude: point.Longitude,
-		Time:      point.Time,
-		Elevation: point.Elevation,
+// Speed returns the speed in meters per second.
+func (log *Log) Speed() float64 {
+	sec := log.Duration
+	if sec == 0 {
+		return 0
 	}
-
-	ge, err := gpx.ParseGarminTrackPointExtension(point.Extensions)
-	if err == nil {
-		p.Heartrate = ge.HeartRate
-	}
-
-	return p
+	return float64(log.Distance) / float64(sec)
 }

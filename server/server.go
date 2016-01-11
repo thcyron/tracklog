@@ -15,6 +15,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"github.com/thcyron/tracklog"
 	"github.com/thcyron/tracklog/db"
+	"github.com/thcyron/tracklog/models"
 )
 
 // DataDir points to the directory where the public/ and templates/ directories are.
@@ -113,7 +114,7 @@ type renderData struct {
 	Title      string
 	ActiveTab  string
 	Breadcrumb *Breadcrumb
-	User       *tracklog.User
+	User       *models.User
 	CSRFToken  string
 	CSRFField  template.HTML
 	Version    string

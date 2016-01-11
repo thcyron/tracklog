@@ -6,7 +6,7 @@ import (
 
 	"github.com/gorilla/context"
 	"github.com/julienschmidt/httprouter"
-	"github.com/thcyron/tracklog"
+	"github.com/thcyron/tracklog/models"
 )
 
 type contextKey int
@@ -75,12 +75,12 @@ func (c *Context) SetData(data interface{}) {
 	context.Set(c.r, ctxData, data)
 }
 
-func (c *Context) User() *tracklog.User {
-	user, _ := context.Get(c.r, ctxUser).(*tracklog.User)
+func (c *Context) User() *models.User {
+	user, _ := context.Get(c.r, ctxUser).(*models.User)
 	return user
 }
 
-func (c *Context) SetUser(user *tracklog.User) {
+func (c *Context) SetUser(user *models.User) {
 	context.Set(c.r, ctxUser, user)
 }
 
