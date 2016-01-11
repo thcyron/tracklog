@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/thcyron/tracklog"
+	"github.com/thcyron/tracklog/heartrate"
 )
 
 const logTimeFormat = "2006-01-02 15:04:05"
@@ -264,20 +265,20 @@ func (s *Server) HandleGetLog(w http.ResponseWriter, r *http.Request) {
 		data.Log.Tracks = append(data.Log.Tracks, points)
 	}
 
-	hrSummary := tracklog.HeartrateSummaryForLog(log)
+	hrSummary := heartrate.SummaryForLog(log)
 	if len(hrSummary.Rates) > 0 {
 		data.Log.HR = strconv.Itoa(hrSummary.Average)
 
-		perc := func(zone tracklog.HeartrateZone) float64 {
+		perc := func(zone heartrate.Zone) float64 {
 			return float64(hrSummary.Zones[zone]) / float64(len(hrSummary.Rates)) * 100.0
 		}
 
-		data.Log.HRZones.Red = perc(tracklog.HeartrateZoneRed)
-		data.Log.HRZones.Anaerobic = perc(tracklog.HeartrateZoneAnaerobic)
-		data.Log.HRZones.Aerobic = perc(tracklog.HeartrateZoneAerobic)
-		data.Log.HRZones.FatBurning = perc(tracklog.HeartrateZoneFatBurning)
-		data.Log.HRZones.Easy = perc(tracklog.HeartrateZoneEasy)
-		data.Log.HRZones.None = perc(tracklog.HeartrateZoneNone)
+		data.Log.HRZones.Red = perc(heartrate.ZoneRed)
+		data.Log.HRZones.Anaerobic = perc(heartrate.ZoneAnaerobic)
+		data.Log.HRZones.Aerobic = perc(heartrate.ZoneAerobic)
+		data.Log.HRZones.FatBurning = perc(heartrate.ZoneFatBurning)
+		data.Log.HRZones.Easy = perc(heartrate.ZoneEasy)
+		data.Log.HRZones.None = perc(heartrate.ZoneNone)
 	}
 
 	ctx.SetTitle(log.Name)
