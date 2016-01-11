@@ -8,9 +8,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/thcyron/tracklog"
 	"github.com/thcyron/tracklog/heartrate"
 	"github.com/thcyron/tracklog/models"
+	"github.com/thcyron/tracklog/utils"
 )
 
 const logTimeFormat = "2006-01-02 15:04:05"
@@ -83,8 +83,8 @@ func (s *Server) HandleGetLogs(w http.ResponseWriter, r *http.Request) {
 	for _, log := range logs {
 		if month != log.Start.Month() {
 			if group != nil {
-				group.Duration = tracklog.Duration(duration).String()
-				group.Distance = tracklog.Distance(distance).String()
+				group.Duration = utils.Duration(duration).String()
+				group.Distance = utils.Distance(distance).String()
 			}
 
 			duration = 0
@@ -101,16 +101,16 @@ func (s *Server) HandleGetLogs(w http.ResponseWriter, r *http.Request) {
 			ID:       log.ID,
 			Name:     log.Name,
 			Start:    log.Start.Format(logTimeFormat),
-			Duration: tracklog.Duration(log.Duration).String(),
-			Distance: tracklog.Distance(log.Distance).String(),
+			Duration: utils.Duration(log.Duration).String(),
+			Distance: utils.Distance(log.Distance).String(),
 			Tags:     log.Tags,
 		})
 		distance += log.Distance
 		duration += log.Duration
 	}
 	if group != nil {
-		group.Duration = tracklog.Duration(duration).String()
-		group.Distance = tracklog.Distance(distance).String()
+		group.Duration = utils.Duration(duration).String()
+		group.Distance = utils.Distance(distance).String()
 	}
 
 	for _, y := range years {
@@ -243,10 +243,10 @@ func (s *Server) HandleGetLog(w http.ResponseWriter, r *http.Request) {
 			Name:     log.Name,
 			Start:    log.Start.Format(logTimeFormat),
 			End:      log.End.Format(logTimeFormat),
-			Duration: tracklog.Duration(log.Duration).String(),
-			Distance: tracklog.Distance(log.Distance).String(),
-			Speed:    tracklog.Speed(log.Speed()).String(),
-			Pace:     tracklog.Speed(log.Speed()).Pace().String(),
+			Duration: utils.Duration(log.Duration).String(),
+			Distance: utils.Distance(log.Distance).String(),
+			Speed:    utils.Speed(log.Speed()).String(),
+			Pace:     utils.Speed(log.Speed()).Pace().String(),
 			Tracks:   make([][]logDataPoint, 0, len(log.Tracks)),
 			Tags:     log.Tags,
 		},

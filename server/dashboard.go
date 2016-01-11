@@ -3,7 +3,7 @@ package server
 import (
 	"net/http"
 
-	"github.com/thcyron/tracklog"
+	"github.com/thcyron/tracklog/utils"
 )
 
 const dashboardRecentLogsCount = 5
@@ -41,8 +41,8 @@ func (s *Server) HandleDashboard(w http.ResponseWriter, r *http.Request) {
 			ID:       log.ID,
 			Name:     log.Name,
 			Date:     log.Start.Format(logTimeFormat),
-			Duration: tracklog.Duration(log.Duration).String(),
-			Distance: tracklog.Distance(log.Distance).String(),
+			Duration: utils.Duration(log.Duration).String(),
+			Distance: utils.Distance(log.Distance).String(),
 			Tags:     log.Tags,
 		})
 	}

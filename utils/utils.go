@@ -1,4 +1,4 @@
-package tracklog
+package utils
 
 import (
 	"fmt"
@@ -54,7 +54,7 @@ func (p Pace) String() string {
 
 const earthRadius = 6371000
 
-func haversine(lat1, lon1, lat2, lon2 float64) float64 {
+func Haversine(lat1, lon1, lat2, lon2 float64) float64 {
 	dLat := (lat2 - lat1) * (math.Pi / 180.0)
 	dLon := (lon2 - lon1) * (math.Pi / 180.0)
 	rlat1 := lat1 * (math.Pi / 180.0)
