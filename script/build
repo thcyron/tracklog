@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -e
+./script/fmt
+(cd cmd/server && go build)
+(cd cmd/import && go build)
