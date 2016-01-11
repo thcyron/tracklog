@@ -24,8 +24,7 @@ To build the JavaScript and CSS assets, run:
 
 Now, build the command line programs:
 
-    (cd cmd/server && go build)
-    (cd cmd/import && go build)
+    ./script/build
 
 Create and initialize a new Postgres database, which will also create a new user
 with both username and password set to *admin*:
