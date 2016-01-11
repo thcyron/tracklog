@@ -15,11 +15,7 @@ func (d Duration) String() string {
 
 	days := int(hours / 24)
 	hours %= 24
-	if days == 1 {
-		return fmt.Sprintf("1 day %d:%02d:%02d", hours, minutes, seconds)
-	}
-
-	return fmt.Sprintf("%d days %d:%02d:%02d", days, hours, minutes, seconds)
+	return fmt.Sprintf("%dd %d:%02d:%02d", days, hours, minutes, seconds)
 }
 
 type Distance uint // meters
