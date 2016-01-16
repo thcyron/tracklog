@@ -26,11 +26,14 @@ Now, build the command line programs:
 
     ./script/build
 
-Create and initialize a new Postgres database, which will also create a new user
-with both username and password set to *admin*:
+Create and initialize a new Postgres database:
 
     createdb tracklog
     psql tracklog < db/postgres.sql
+
+Add a new user:
+
+    cmd/control -config config.json user add <name>
 
 Start the server and point your browser to http://localhost:8080/:
 
