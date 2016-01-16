@@ -68,8 +68,4 @@ CREATE TABLE "log_tag" (
 
 CREATE INDEX "log_tag_tag_idx" ON "log_tag" ("tag");
 
--- Create admin user
--- bcrypt hash generated with: ruby -rbcrypt -e 'puts BCrypt::Password.create("admin")'
-INSERT INTO "user" ("username", "password") VALUES ('admin', '$2a$10$OPBuI1urZVV/2Rc5yA5mAOaLaKyBuQJMlk006QU0TbDB.gpY6AmIK');
-
 COMMIT;
