@@ -67,6 +67,41 @@ func (d *Postgres) UserByUsername(username string) (*models.User, error) {
 	return user, nil
 }
 
+func (d *Postgres) AddUser(user *models.User) error {
+	var id int
+
+	query, args, dest := sqlbuilder.Postgres.Insert().
+		Into("user").
+		Set("username", user.Username).
+		Set("password", user.Password).
+		Return("id", &id).
+		Build()
+
+	err := d.db.QueryRow(query, args...).Scan(dest...)
+	if err != nil {
+		return err
+	}
+
+	user.ID = id
+	return nil
+}
+
+
+func (d *Postgres) UpdateUser(user *models.User) error {
+	query, args := sqlbuilder.Postgres.Update().
+		Table("user").
+		Set("username", user.Username).
+		Set("password", user.Password).
+		Build()
+	_, err:= d.db.Exec(query, args...)
+	return err
+}
+
+func (d *Postgres) DeleteUser(user *models.User) error {
+	_, err := d.db.Exec(`DELETE FROM "user" WHERE "id" = $1`, user.ID)
+	return err
+}
+
 func (d *Postgres) RecentUserLogs(user *models.User, count int) ([]*models.Log, error) {
 	tx, err := d.db.Begin()
 	if err != nil {

@@ -7,6 +7,9 @@ type DB interface {
 
 	UserByID(id int) (*models.User, error)
 	UserByUsername(username string) (*models.User, error)
+	AddUser(user *models.User) error
+	UpdateUser(user *models.User) error
+	DeleteUser(user *models.User) error
 
 	RecentUserLogs(user *models.User, count int) ([]*models.Log, error)
 	UserLogYears(user *models.User) ([]int, error)
