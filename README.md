@@ -33,7 +33,7 @@ Create and initialize a new Postgres database:
 
 Add a new user:
 
-    cmd/control -config config.json user add <name>
+    cmd/control/control -config config.json user add <name>
 
 Start the server and point your browser to http://localhost:8080/:
 
@@ -41,7 +41,7 @@ Start the server and point your browser to http://localhost:8080/:
 
 You can batch-import your GPX files with:
 
-    cmd/import/import -config config.json -user admin /path/to/your/*.gpx
+    cmd/control/control -config config.json import -user <name> /path/to/your/*.gpx
 
 ## License
 
