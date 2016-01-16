@@ -1,4 +1,4 @@
-cmd/import/import
+cmd/control/control
 cmd/server/server
 node_modules/
 npm-debug.log
