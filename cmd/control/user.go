@@ -141,6 +141,7 @@ func passwordUserCmd(args []string) {
 		log.Fatalln(err)
 	}
 	user.Password = string(pwhash)
+	user.PasswordVersion += 1
 
 	if err := database.UpdateUser(user); err != nil {
 		log.Fatalln(err)

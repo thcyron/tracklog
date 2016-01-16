@@ -33,6 +33,7 @@ func (d *Postgres) UserByID(id int) (*models.User, error) {
 		Map("id", &user.ID).
 		Map("username", &user.Username).
 		Map("password", &user.Password).
+		Map("password_version", &user.PasswordVersion).
 		Where("id = ?", id).
 		Build()
 
@@ -54,6 +55,7 @@ func (d *Postgres) UserByUsername(username string) (*models.User, error) {
 		Map("id", &user.ID).
 		Map("username", &user.Username).
 		Map("password", &user.Password).
+		Map("password_version", &user.PasswordVersion).
 		Where("username = ?", username).
 		Build()
 
@@ -86,14 +88,14 @@ func (d *Postgres) AddUser(user *models.User) error {
 	return nil
 }
 
-
 func (d *Postgres) UpdateUser(user *models.User) error {
 	query, args := sqlbuilder.Postgres.Update().
 		Table("user").
 		Set("username", user.Username).
 		Set("password", user.Password).
+		Set("password_version", user.PasswordVersion).
 		Build()
-	_, err:= d.db.Exec(query, args...)
+	_, err := d.db.Exec(query, args...)
 	return err
 }
 

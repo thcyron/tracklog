@@ -5,7 +5,8 @@ CREATE EXTENSION IF NOT EXISTS citext WITH SCHEMA public;
 CREATE TABLE "user" (
   "id" serial PRIMARY KEY,
   "username" citext NOT NULL,
-  "password" text NOT NULL
+  "password" text NOT NULL,
+  "password_version" int NOT NULL DEFAULT 1
 );
 
 CREATE UNIQUE INDEX "user_username_idx" ON "user" ("username");

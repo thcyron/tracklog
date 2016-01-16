@@ -56,7 +56,7 @@ func (s *Server) HandlePostSignIn(w http.ResponseWriter, r *http.Request) {
 
 	token := jwt.New(jwt.SigningMethodHS256)
 	token.Claims["user_id"] = user.ID
-	// TODO(thcyron): Expire token when user changes password.
+	token.Claims["v"] = user.PasswordVersion
 
 	tokenString, err := token.SignedString([]byte(s.config.Server.SigningKey))
 	if err != nil {
@@ -119,5 +119,20 @@ func (s *Server) userFromRequest(r *http.Request) (*models.User, error) {
 	if !ok {
 		return nil, nil
 	}
-	return s.db.UserByID(int(id))
+	user, err := s.db.UserByID(int(id))
+	if err != nil {
+		return nil, err
+	}
+	if user == nil {
+		return nil, nil
+	}
+
+	v, ok := token.Claims["v"].(float64)
+	if !ok {
+		return nil, err
+	}
+	if int(v) != user.PasswordVersion {
+		return nil, nil
+	}
+	return user, nil
 }
