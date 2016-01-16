@@ -5,5 +5,5 @@ export GOOS=linux
 rm -rf dist && mkdir -p dist
 cp -r templates public dist/
 (cd cmd/server && go build -ldflags "-X github.com/thcyron/tracklog/server.DataDir=/usr/local/share/tracklog" -o ../../dist/tracklog-server)
-(cd cmd/import && go build -o ../../dist/tracklog-import)
+(cd cmd/control && go build -o ../../dist/tracklog-control)
 docker build -t thcyron/tracklog .
