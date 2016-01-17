@@ -7,6 +7,7 @@ import Immutable from "immutable";
 import LogMap from "./LogMap";
 import LogDetails from "./LogDetails";
 import LogName from "./LogName";
+import LogCharts from "./LogCharts";
 
 import Dispatcher from "../Dispatcher";
 
@@ -118,6 +119,7 @@ export default class Log extends React.Component {
         <div className="row">
           <div className="col-md-9">
             <LogMap log={this.state.log} mapboxAccessToken={Tracklog.mapboxAccessToken} />
+            <LogCharts log={this.state.log} />
           </div>
           <div className="col-md-3">
             <LogDetails log={this.state.log} onEdit={this.onEdit.bind(this)} editing={this.state.editing} />

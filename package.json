@@ -26,6 +26,8 @@
     "leaflet": "^0.7.7",
     "whatwg-fetch": "^0.10.1",
     "immutable": "^3.7.6",
-    "chart.js": "^1.0.2"
+    "chart.js": "^1.0.2",
+    "highcharts": "^4.2.1",
+    "classnames": "^2.2.3"
   }
 }

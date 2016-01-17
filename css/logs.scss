@@ -14,8 +14,13 @@
 
 .log-map {
   height: 600px;
+  margin-bottom: 20px;
 }
 
-.log-heart-rate-bar {
-  margin: 0;
+.log-charts, .log-charts-tabs {
+  margin-bottom: 20px;
+}
+
+.log-chart-chart {
+  height: 300px;
 }

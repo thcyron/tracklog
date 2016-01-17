@@ -211,6 +211,8 @@ type logDataHRZones struct {
 type logDataPoint struct {
 	Lat float64 `json:"lat"`
 	Lon float64 `json:"lon"`
+	Ele float64 `json:"ele"`
+	HR  uint    `json:"hr"`
 }
 
 func (s *Server) HandleGetLog(w http.ResponseWriter, r *http.Request) {
@@ -261,6 +263,8 @@ func (s *Server) HandleGetLog(w http.ResponseWriter, r *http.Request) {
 			points = append(points, logDataPoint{
 				Lat: point.Latitude,
 				Lon: point.Longitude,
+				Ele: point.Elevation,
+				HR:  point.Heartrate,
 			})
 		}
 		data.Log.Tracks = append(data.Log.Tracks, points)
