@@ -10,7 +10,7 @@ export function uploadLog({file}) {
         credentials: "same-origin",
         headers: {
           "Content-Type": "application/json; charset=utf-8",
-          "X-CSRF-Token": window.tracklog.csrfToken,
+          "X-CSRF-Token": Tracklog.csrfToken,
         },
         body: JSON.stringify({
           "filename": file.name,

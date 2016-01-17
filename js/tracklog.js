@@ -34,7 +34,7 @@ function createForm(href, method) {
   const csrfField = document.createElement("input");
   csrfField.type = "hidden";
   csrfField.name = "_csrf";
-  csrfField.value = tracklog.csrfToken;
+  csrfField.value = Tracklog.csrfToken;
   form.appendChild(csrfField);
 
   return form;
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const csrfField = document.createElement("input");
       csrfField.type = "hidden";
       csrfField.name = "_csrf";
-      csrfField.value = tracklog.csrfToken;
+      csrfField.value = Tracklog.csrfToken;
       form.appendChild(csrfField);
     });
   }
@@ -94,6 +94,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-window.tracklog = {
+window.Tracklog = {
   renderLog: renderLog,
 };
