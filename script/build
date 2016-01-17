@@ -3,3 +3,4 @@ set -e
 ./script/fmt
 (cd cmd/server && go build)
 (cd cmd/control && go build)
+npm run build
