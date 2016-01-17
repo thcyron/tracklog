@@ -112,16 +112,17 @@ func (s *Server) loadTemplates() (*template.Template, error) {
 }
 
 type renderData struct {
-	Title      string
-	ActiveTab  string
-	Breadcrumb *Breadcrumb
-	User       *models.User
-	CSRFToken  string
-	CSRFField  template.HTML
-	Version    string
-	Runtime    string
-	Content    template.HTML
-	Data       interface{}
+	Title             string
+	ActiveTab         string
+	Breadcrumb        *Breadcrumb
+	User              *models.User
+	CSRFToken         string
+	CSRFField         template.HTML
+	MapboxAccessToken string
+	Version           string
+	Runtime           string
+	Content           template.HTML
+	Data              interface{}
 }
 
 func (s *Server) render(w http.ResponseWriter, r *http.Request, name string) {
@@ -137,14 +138,15 @@ func (s *Server) render(w http.ResponseWriter, r *http.Request, name string) {
 	}
 
 	data := renderData{
-		Title:      ctx.Title(),
-		ActiveTab:  ctx.ActiveTab(),
-		Breadcrumb: ctx.Breadcrumb(),
-		User:       ctx.User(),
-		CSRFToken:  csrf.Token(r),
-		CSRFField:  csrf.TemplateField(r),
-		Version:    tracklog.Version,
-		Data:       ctx.Data(),
+		Title:             ctx.Title(),
+		ActiveTab:         ctx.ActiveTab(),
+		Breadcrumb:        ctx.Breadcrumb(),
+		User:              ctx.User(),
+		CSRFToken:         csrf.Token(r),
+		CSRFField:         csrf.TemplateField(r),
+		MapboxAccessToken: s.config.Server.MapboxAccessToken,
+		Version:           tracklog.Version,
+		Data:              ctx.Data(),
 	}
 	if s.config.Server.Development {
 		data.Runtime = fmt.Sprintf("%.0fms", time.Now().Sub(ctx.Start()).Seconds()*1000)

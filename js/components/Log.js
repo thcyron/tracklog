@@ -117,7 +117,7 @@ export default class Log extends React.Component {
         {this.topRow}
         <div className="row">
           <div className="col-md-9">
-            <LogMap log={this.state.log} />
+            <LogMap log={this.state.log} mapboxAccessToken={Tracklog.mapboxAccessToken} />
           </div>
           <div className="col-md-3">
             <LogDetails log={this.state.log} onEdit={this.onEdit.bind(this)} editing={this.state.editing} />

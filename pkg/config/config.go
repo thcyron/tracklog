@@ -7,10 +7,11 @@ import (
 
 type Config struct {
 	Server struct {
-		Development   bool   `json:"development"`
-		ListenAddress string `json:"listen_address"`
-		CSRFAuthKey   string `json:"csrf_auth_key"`
-		SigningKey    string `json:"signing_key"`
+		Development       bool   `json:"development"`
+		ListenAddress     string `json:"listen_address"`
+		CSRFAuthKey       string `json:"csrf_auth_key"`
+		SigningKey        string `json:"signing_key"`
+		MapboxAccessToken string `json:"mapbox_access_token"`
 	} `json:"server"`
 	DB struct {
 		Driver string `json:"driver"`

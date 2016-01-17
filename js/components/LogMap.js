@@ -7,7 +7,17 @@ import Leaflet from "leaflet";
 export default class LogMap extends React.Component {
   componentDidMount() {
     this.map = Leaflet.map(ReactDOM.findDOMNode(this));
-    this.map.addLayer(Leaflet.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"));
+
+    let layer;
+    if (this.props.mapboxAccessToken) {
+      layer = Leaflet.tileLayer(`https://api.mapbox.com/v4/mapbox.outdoors/{z}/{x}/{y}.png?access_token=${this.props.mapboxAccessToken}`, {
+        attribution: `<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>`,
+      });
+    } else {
+      layer = Leaflet.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png");
+    }
+
+    this.map.addLayer(layer);
     this.updateMap();
   }
 
