@@ -132,7 +132,6 @@ func (s *Server) HandleGetLogs(w http.ResponseWriter, r *http.Request) {
 	ctx.SetActiveTab("logs")
 	ctx.SetData(data)
 
-	w.WriteHeader(http.StatusOK)
 	s.render(w, r, "logs")
 }
 
@@ -292,7 +291,6 @@ func (s *Server) HandleGetLog(w http.ResponseWriter, r *http.Request) {
 	ctx.SetActiveTab("logs")
 	ctx.SetData(data)
 
-	w.WriteHeader(http.StatusOK)
 	s.render(w, r, "log")
 }
 

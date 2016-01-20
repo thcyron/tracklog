@@ -58,11 +58,14 @@ func New(conf *config.Config, db db.DB) (*Server, error) {
 	n.UseFunc(func(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 		handlers.HTTPMethodOverrideHandler(next).ServeHTTP(w, r)
 	})
+	n.UseFunc(func(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
+		handlers.CompressHandler(next).ServeHTTP(w, r)
+	})
 
 	n.UseFunc(s.userAuthMiddleware)
 
 	r := httprouter.New()
-	r.NotFound = http.FileServer(http.Dir(path.Join(DataDir, "public")))
+	r.ServeFiles("/static/*filepath", http.Dir(path.Join(DataDir, "public")))
 	r.GET("/signin", s.wrapHandler(s.HandleGetSignIn))
 	r.POST("/signin", s.wrapHandler(s.HandlePostSignIn))
 	r.POST("/signout", s.wrapHandler(s.HandlePostSignOut))
@@ -164,6 +167,8 @@ func (s *Server) render(w http.ResponseWriter, r *http.Request, name string) {
 		panic(err)
 	}
 	data.Content = template.HTML(buf.String())
+
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
 	if err := tmpl.ExecuteTemplate(w, "layout.html", data); err != nil {
 		panic(err)
