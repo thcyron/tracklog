@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -e
+npm run production:build
 export GOARCH=amd64
 export GOOS=linux
 rm -rf dist && mkdir -p dist
