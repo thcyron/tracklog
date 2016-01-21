@@ -2,6 +2,7 @@ package config
 
 import (
 	"encoding/json"
+	"errors"
 	"io"
 )
 
@@ -25,4 +26,14 @@ func Read(r io.Reader) (*Config, error) {
 		return nil, err
 	}
 	return config, nil
+}
+
+func Check(config *Config) error {
+	if config.Server.CSRFAuthKey == "" {
+		return errors.New("missing server.csrf_auth_key")
+	}
+	if config.Server.SigningKey == "" {
+		return errors.New("missing server.signing_key")
+	}
+	return nil
 }

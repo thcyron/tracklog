@@ -28,6 +28,9 @@ func main() {
 	if err != nil {
 		die("cannot read config file: %s", err)
 	}
+	if err := config.Check(conf); err != nil {
+		die("invalid config file: %s", err)
+	}
 
 	DB := db.Driver(conf.DB.Driver)
 	if DB == nil {
