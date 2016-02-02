@@ -12,13 +12,6 @@ export default class LogCharts extends React.Component {
     this.state = { tab: "elevation" };
   }
 
-  static tabs() {
-    return [
-      { name: "Elevation", key: "elevation" },
-      { name: "Heartrate", key: "heartrate" },
-    ];
-  }
-
   get _chart() {
     switch (this.state.tab) {
     case "elevation":
@@ -28,6 +21,16 @@ export default class LogCharts extends React.Component {
     default:
       return null;
     }
+  }
+
+  get _tabs() {
+    let tabs = [
+      { name: "Elevation", key: "elevation" },
+    ];
+    if (this.props.log.get("hr")) {
+      tabs.push({ name: "Heartrate", key: "heartrate" });
+    }
+    return tabs;
   }
 
   _onTabClick(tab, event) {
@@ -42,7 +45,7 @@ export default class LogCharts extends React.Component {
     return (
       <div className="log-charts">
         <ul className="nav nav-tabs log-charts-tabs">
-          {LogCharts.tabs().map((tab) => {
+          {this._tabs.map((tab) => {
             return (
               <li key={tab.key} className={classNames({ active: tab.key == this.state.tab })}>
                 <a href={`#${tab.key}`} onClick={(event) => { this._onTabClick(tab.key, event) }}>{tab.name}</a>
