@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/thcyron/gpx"
+	"github.com/thcyron/tracklog/pkg/utils"
 )
 
 type Point struct {
@@ -30,4 +31,8 @@ func NewPoint(point gpx.Point) *Point {
 	}
 
 	return p
+}
+
+func (p *Point) DistanceTo(p2 *Point) float64 {
+	return utils.Haversine(p.Latitude, p.Longitude, p2.Latitude, p2.Longitude)
 }

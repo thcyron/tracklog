@@ -208,10 +208,12 @@ type logDataHRZones struct {
 }
 
 type logDataPoint struct {
-	Lat float64 `json:"lat"`
-	Lon float64 `json:"lon"`
-	Ele float64 `json:"ele"`
-	HR  uint    `json:"hr"`
+	Lat               float64 `json:"lat"`
+	Lon               float64 `json:"lon"`
+	CumulatedDistance float64 `json:"cumulated_distance"`
+	Speed             float64 `json:"speed"`
+	Ele               float64 `json:"ele"`
+	HR                uint    `json:"hr"`
 }
 
 func (s *Server) HandleGetLog(w http.ResponseWriter, r *http.Request) {
@@ -256,15 +258,29 @@ func (s *Server) HandleGetLog(w http.ResponseWriter, r *http.Request) {
 		data.Log.Tags = make([]string, 0, 0)
 	}
 
+	var cumDistance float64
 	for _, track := range log.Tracks {
 		points := make([]logDataPoint, 0, len(track.Points))
-		for _, point := range track.Points {
-			points = append(points, logDataPoint{
+		for i, point := range track.Points {
+			p := logDataPoint{
 				Lat: point.Latitude,
 				Lon: point.Longitude,
 				Ele: point.Elevation,
 				HR:  point.Heartrate,
-			})
+			}
+			if i > 0 {
+				lastPoint := track.Points[i-1]
+				distance := point.DistanceTo(lastPoint)
+				cumDistance += distance
+				p.CumulatedDistance = cumDistance
+				p.Speed = distance / point.Time.Sub(lastPoint.Time).Seconds()
+			} else if len(track.Points) > 1 {
+				nextPoint := track.Points[i+1]
+				distance := point.DistanceTo(nextPoint)
+				p.CumulatedDistance = cumDistance
+				p.Speed = distance / point.Time.Sub(nextPoint.Time).Seconds()
+			}
+			points = append(points, p)
 		}
 		data.Log.Tracks = append(data.Log.Tracks, points)
 	}

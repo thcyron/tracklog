@@ -4,6 +4,7 @@ import React from "react";
 import classNames from "classnames";
 
 import LogElevationChart from "./LogElevationChart";
+import LogSpeedChart from "./LogSpeedChart";
 import LogHeartrateChart from "./LogHeartrateChart";
 
 export default class LogCharts extends React.Component {
@@ -16,6 +17,8 @@ export default class LogCharts extends React.Component {
     switch (this.state.tab) {
     case "elevation":
       return <LogElevationChart log={this.props.log} />;
+    case "speed":
+      return <LogSpeedChart log={this.props.log} />;
     case "heartrate":
       return <LogHeartrateChart log={this.props.log} />;
     default:
@@ -26,6 +29,7 @@ export default class LogCharts extends React.Component {
   get _tabs() {
     let tabs = [
       { name: "Elevation", key: "elevation" },
+      { name: "Speed", key: "speed" },
     ];
     if (this.props.log.get("hr")) {
       tabs.push({ name: "Heartrate", key: "heartrate" });
