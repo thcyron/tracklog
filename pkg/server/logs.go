@@ -278,7 +278,7 @@ func (s *Server) HandleGetLog(w http.ResponseWriter, r *http.Request) {
 				nextPoint := track.Points[i+1]
 				distance := point.DistanceTo(nextPoint)
 				p.CumulatedDistance = cumDistance
-				p.Speed = distance / point.Time.Sub(nextPoint.Time).Seconds()
+				p.Speed = distance / nextPoint.Time.Sub(point.Time).Seconds()
 			}
 			points = append(points, p)
 		}
