@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -e
+
+if [[ $# -ne 3 ]]; then
+  echo "usage: build-release <version> <os> <arch>" >&2
+  exit 2
+fi
+
+version=$1
+os=$2
+arch=$3
+
+GOOS=$os GOARCH=$arch ./script/build
+
+dir=$(mktemp -d ./tracklog.XXXXXXXX)
+trap "rm -rf $dir" EXIT
+
+dest=$dir/tracklog-$version
+mkdir $dest
+cp -r templates public config.json.example $dest
+mkdir $dest/bin
+cp cmd/server/server $dest/bin/server
+cp cmd/control/control $dest/bin/control
+
+(cd $dir && tar czf - tracklog-$version) > tracklog-$version-$os-$arch.tar.gz
