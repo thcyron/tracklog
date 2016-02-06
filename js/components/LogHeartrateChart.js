@@ -2,7 +2,6 @@
 
 import React from "react";
 import Highcharts from "highcharts";
-import Leaflet from "leaflet";
 
 export default class LogHeartrateChart extends React.Component {
   _createChart(container) {
@@ -54,14 +53,9 @@ export default class LogHeartrateChart extends React.Component {
 
     log.get("tracks").forEach((track) => {
       track.forEach((point, i) => {
-        if (i > 0) {
-          const lastPoint = track.get(i - 1);
-          const p0 = new Leaflet.latLng(lastPoint.get("lat"), lastPoint.get("lon"));
-          const p1 = new Leaflet.latLng(point.get("lat"), point.get("lon"));
-          distance += p0.distanceTo(p1);
-        }
         const hr = point.get("hr");
         if (hr) {
+          const distance = point.get("cumulated_distance");
           data.push([distance, hr]);
         }
       });
