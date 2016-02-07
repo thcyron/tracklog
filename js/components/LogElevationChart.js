@@ -19,6 +19,9 @@ export default class LogElevationChart extends React.Component {
       title: {
         text: null,
       },
+      tooltip: {
+        formatter: function() { return `<b>${this.y} m</b>`; },
+      },
       xAxis: {
         title: {
           text: "Distance",
@@ -58,7 +61,7 @@ export default class LogElevationChart extends React.Component {
         const ele = point.get("ele");
         if (ele) {
           const distance = point.get("cumulated_distance");
-          data.push([distance, ele]);
+          data.push([Math.round(distance), Math.round(ele)]);
         }
       });
     });

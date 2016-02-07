@@ -20,6 +20,9 @@ export default class LogSpeedChart extends React.Component {
       title: {
         text: null,
       },
+      tooltip: {
+        formatter: function() { return `<b>${this.y} km/h</b>`; },
+      },
       xAxis: {
         title: {
           text: "Distance",
@@ -59,7 +62,7 @@ export default class LogSpeedChart extends React.Component {
         if (speed !== null) {
           const distance = point.get("cumulated_distance");
           const kmh = speed / 1000 * 3600;
-          data.push([distance, kmh]);
+          data.push([Math.round(distance), Math.round(kmh * 10) / 10]);
         }
       });
     });

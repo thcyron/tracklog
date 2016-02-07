@@ -19,6 +19,9 @@ export default class LogHeartrateChart extends React.Component {
       title: {
         text: null,
       },
+      tooltip: {
+        formatter: function() { return `<b>${this.y} bpm</b>`; },
+      },
       xAxis: {
         title: {
           text: "Distance",
@@ -58,7 +61,7 @@ export default class LogHeartrateChart extends React.Component {
         const hr = point.get("hr");
         if (hr) {
           const distance = point.get("cumulated_distance");
-          data.push([distance, hr]);
+          data.push([Math.round(distance), hr]);
         }
       });
     });
