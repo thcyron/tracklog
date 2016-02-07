@@ -10,6 +10,7 @@ import (
 
 	"github.com/thcyron/tracklog/pkg/heartrate"
 	"github.com/thcyron/tracklog/pkg/models"
+	"github.com/thcyron/tracklog/pkg/rdp"
 	"github.com/thcyron/tracklog/pkg/utils"
 )
 
@@ -259,9 +260,30 @@ func (s *Server) HandleGetLog(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var cumDistance float64
+	performReduce := r.FormValue("reduce") != "no"
+
 	for _, track := range log.Tracks {
-		points := make([]logDataPoint, 0, len(track.Points))
-		for i, point := range track.Points {
+		points := track.Points
+
+		if performReduce {
+			rdpPoints := make([]rdp.Point, 0, len(track.Points))
+			for _, point := range track.Points {
+				rdpPoints = append(rdpPoints, rdp.Point{
+					X:    point.Longitude,
+					Y:    point.Latitude,
+					Data: point,
+				})
+			}
+			const epsilon = 0.00002 // found by trial
+			reducedPoints := rdp.Reduce(rdpPoints, epsilon)
+			points = make([]*models.Point, 0, len(reducedPoints))
+			for _, rp := range reducedPoints {
+				points = append(points, rp.Data.(*models.Point))
+			}
+		}
+
+		var ps []logDataPoint
+		for i, point := range points {
 			p := logDataPoint{
 				Lat: point.Latitude,
 				Lon: point.Longitude,
@@ -269,20 +291,20 @@ func (s *Server) HandleGetLog(w http.ResponseWriter, r *http.Request) {
 				HR:  point.Heartrate,
 			}
 			if i > 0 {
-				lastPoint := track.Points[i-1]
+				lastPoint := points[i-1]
 				distance := point.DistanceTo(lastPoint)
 				cumDistance += distance
 				p.CumulatedDistance = cumDistance
 				p.Speed = distance / point.Time.Sub(lastPoint.Time).Seconds()
-			} else if len(track.Points) > 1 {
-				nextPoint := track.Points[i+1]
+			} else if len(points) > 1 {
+				nextPoint := points[i+1]
 				distance := point.DistanceTo(nextPoint)
 				p.CumulatedDistance = cumDistance
 				p.Speed = distance / nextPoint.Time.Sub(point.Time).Seconds()
 			}
-			points = append(points, p)
+			ps = append(ps, p)
 		}
-		data.Log.Tracks = append(data.Log.Tracks, points)
+		data.Log.Tracks = append(data.Log.Tracks, ps)
 	}
 
 	hrSummary := heartrate.SummaryForLog(log)
