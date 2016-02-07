@@ -10,6 +10,7 @@ export default class LogHeartrateChart extends React.Component {
     }
     Highcharts.chart(container, {
       chart: {
+        animation: false,
         style: {
           fontFamily: `"Helvetica Neue", Helvetica, Arial, sans-serif`,
           fontSize: "12px",
@@ -42,6 +43,7 @@ export default class LogHeartrateChart extends React.Component {
           name: "Heartrate",
           color: "rgb(30, 179, 0)",
           data: this._dataFromLog(this.props.log),
+          animation: false,
         },
       ],
     });

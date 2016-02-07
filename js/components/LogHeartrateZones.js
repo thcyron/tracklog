@@ -11,6 +11,7 @@ export default class LogHeartrateZones extends React.Component {
     Highcharts.chart(container, {
       chart: {
         type: "pie",
+        animation: false,
         style: {
           fontFamily: `"Helvetica Neue", Helvetica, Arial, sans-serif`,
           fontSize: "12px",
@@ -34,6 +35,7 @@ export default class LogHeartrateZones extends React.Component {
           dataLabels: {
             enabled: false,
           },
+          animation: false,
         },
       ],
     });
