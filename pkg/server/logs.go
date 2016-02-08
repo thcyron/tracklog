@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/thcyron/tracklog/pkg/geo"
 	"github.com/thcyron/tracklog/pkg/heartrate"
 	"github.com/thcyron/tracklog/pkg/models"
 	"github.com/thcyron/tracklog/pkg/rdp"
@@ -268,13 +269,15 @@ func (s *Server) HandleGetLog(w http.ResponseWriter, r *http.Request) {
 		if performReduce {
 			rdpPoints := make([]rdp.Point, 0, len(track.Points))
 			for _, point := range track.Points {
+				λ, φ := geo.ToRad(point.Longitude), geo.ToRad(point.Latitude)
+				x, y := geo.EquirectangularProjection(λ, φ, 0)
 				rdpPoints = append(rdpPoints, rdp.Point{
-					X:    point.Longitude,
-					Y:    point.Latitude,
+					X:    x,
+					Y:    y,
 					Data: point,
 				})
 			}
-			const epsilon = 0.00002 // found by trial
+			const epsilon = 0.0000001 // ≈ 1m
 			reducedPoints := rdp.Reduce(rdpPoints, epsilon)
 			points = make([]*models.Point, 0, len(reducedPoints))
 			for _, rp := range reducedPoints {
