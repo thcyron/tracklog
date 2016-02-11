@@ -11,7 +11,7 @@ There’s a Docker image [thcyron/tracklog](https://hub.docker.com/r/thcyron/tra
 for Tracklog. This image only contains the server and import binary, you have to
 bring your own Postgres server. You also have to provide a config file.
 
-    docker run -v /path/to/config.json:/etc/tracklog.json -p 8080:8080 thcyron/tracklog
+    docker run -v /path/to/config.json:/config.json -p 8080:8080 thcyron/tracklog
 
 ## Installation
 
