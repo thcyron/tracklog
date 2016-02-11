@@ -12,4 +12,4 @@ $ACBUILD copy templates /templates
 $ACBUILD copy public /public
 $ACBUILD set-exec /bin/server
 $ACBUILD mount add config /config.json --read-only
-$ACBUILD write tracklog-latest-linux-amd64.aci
+$ACBUILD write --overwrite tracklog-latest-linux-amd64.aci
