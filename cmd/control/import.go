@@ -17,7 +17,8 @@ func importUsage() {
 
 Options:
 
-  -user <username>    User to import files for`)
+  -user <username>    User to import files for
+`)
 	os.Exit(2)
 }
 

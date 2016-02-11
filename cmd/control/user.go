@@ -20,7 +20,8 @@ Commands:
 
   add         Add a new user
   delete      Delete a user
-  password    Change a user’s password`)
+  password    Change a user’s password
+`)
 	os.Exit(2)
 }
 
@@ -42,7 +43,7 @@ func userCmd(args []string) {
 }
 
 func addUserUsage() {
-	fmt.Fprint(os.Stderr, `usage: tracklog-control user add <username>`)
+	fmt.Fprint(os.Stderr, `usage: tracklog-control user add <username>\n`)
 	os.Exit(2)
 }
 
