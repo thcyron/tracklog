@@ -22,7 +22,7 @@ func init() {
 func main() {
 	flags := flag.NewFlagSet("tracklog-control", flag.ExitOnError)
 	flags.Usage = usage
-	configFile := flags.String("config", "config.json", "path to config file")
+	configFile := flags.String("config", "config.toml", "path to config file")
 	flags.Parse(os.Args[1:])
 	if flags.NArg() == 0 {
 		usage()
@@ -68,7 +68,7 @@ func usage() {
 
 Options:
 
-  -config <path>   Path to config file (default: config.json)
+  -config <path>   Path to config file (default: config.toml)
 
 Commands:
 

@@ -1,6 +1,6 @@
 # Config
 
-Tracklog is configured via a JSON file.
+Tracklog is configured via a TOML file.
 
 ## `server` Section
 

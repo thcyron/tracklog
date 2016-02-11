@@ -11,5 +11,5 @@ $ACBUILD copy cmd/control/control /bin/control
 $ACBUILD copy templates /templates
 $ACBUILD copy public /public
 $ACBUILD set-exec /bin/server
-$ACBUILD mount add config /config.json --read-only
+$ACBUILD mount add config /config.toml --read-only
 $ACBUILD write --overwrite tracklog-latest-linux-amd64.aci

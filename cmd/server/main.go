@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	configFile = flag.String("config", "config.json", "config file")
+	configFile = flag.String("config", "config.toml", "config file")
 )
 
 func main() {

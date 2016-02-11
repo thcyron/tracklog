@@ -11,7 +11,7 @@ There’s a Docker image [thcyron/tracklog](https://hub.docker.com/r/thcyron/tra
 for Tracklog. This image only contains the server and import binary, you have to
 bring your own Postgres server. You also have to provide a config file.
 
-    docker run -v /path/to/config.json:/config.json -p 8080:8080 thcyron/tracklog
+    docker run -v /path/to/config.toml:/config.toml -p 8080:8080 thcyron/tracklog
 
 ## Installation
 
@@ -33,15 +33,15 @@ Create and initialize a new Postgres database:
 
 Add a new user:
 
-    cmd/control/control -config config.json user add <name>
+    cmd/control/control -config config.toml user add <name>
 
 Start the server and point your browser to http://localhost:8080/:
 
-    cmd/server/server -config config.json
+    cmd/server/server -config config.toml
 
 You can batch-import your GPX files with:
 
-    cmd/control/control -config config.json import -user <name> /path/to/your/*.gpx
+    cmd/control/control -config config.toml import -user <name> /path/to/your/*.gpx
 
 ## License
 
