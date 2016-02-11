@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -e
 export GO15VENDOREXPERIMENT=1
+export CGO_ENABLED=0
 (cd cmd/server && go build)
 (cd cmd/control && go build)
 npm run build
