@@ -1,2 +1,2 @@
-#!/usr/bin/env bash
+#!/bin/sh
 find pkg cmd -type f -name '*.go' -print0 | xargs -0 goimports -w
