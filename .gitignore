@@ -5,3 +5,4 @@ npm-debug.log
 public/
 dist/
 config.json
+*.aci

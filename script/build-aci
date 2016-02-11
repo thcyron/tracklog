@@ -1,0 +1,15 @@
+#!/bin/sh
+ACBUILD=${ACBUILD:-acbuild}
+
+set -e
+trap "$ACBUILD end" EXIT
+
+$ACBUILD begin
+$ACBUILD set-name thcyron.de/tracklog
+$ACBUILD copy cmd/server/server /bin/server
+$ACBUILD copy cmd/control/control /bin/control
+$ACBUILD copy templates /templates
+$ACBUILD copy public /public
+$ACBUILD set-exec /bin/server
+$ACBUILD mount add config /config.json --read-only
+$ACBUILD write tracklog-latest-linux-amd64.aci
