@@ -2,7 +2,7 @@
   "name": "tracklog",
   "version": "0.1.0",
   "scripts": {
-    "build": "npm run build:css & npm run build:js",
+    "build": "npm run build:css && npm run build:js",
     "build:css": "node-sass --output-style compressed css/tracklog.scss public/tracklog.css",
     "build:js": "browserify -t babelify js/tracklog.js > public/tracklog.js",
     "production:build": "npm run build:css & npm run production:build:js",
