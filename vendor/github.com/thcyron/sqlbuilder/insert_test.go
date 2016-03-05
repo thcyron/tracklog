@@ -13,7 +13,7 @@ func TestInsertMySQL(t *testing.T) {
 		SetSQL("created_at", "NOW()").
 		Build()
 
-	expectedQuery := "INSERT INTO `customers` (`name`, `phone`, `created_at`) VALUES (?, ?, NOW())"
+	expectedQuery := "INSERT INTO customers (name, phone, created_at) VALUES (?, ?, NOW())"
 	if query != expectedQuery {
 		t.Errorf("bad query: %s", query)
 	}
@@ -32,7 +32,7 @@ func TestInsertPostgres(t *testing.T) {
 		SetSQL("created_at", "NOW()").
 		Build()
 
-	expectedQuery := `INSERT INTO "customers" ("name", "phone", "created_at") VALUES ($1, $2, NOW())`
+	expectedQuery := `INSERT INTO customers (name, phone, created_at) VALUES ($1, $2, NOW())`
 	if query != expectedQuery {
 		t.Errorf("bad query: %s", query)
 	}
@@ -52,10 +52,10 @@ func TestInsertReturningPostgres(t *testing.T) {
 		Set("phone", "555").
 		SetSQL("created_at", "NOW()").
 		Return("id", &id).
-		ReturnSQL("1", &one).
+		Return("1", &one).
 		Build()
 
-	expectedQuery := `INSERT INTO "customers" ("name", "phone", "created_at") VALUES ($1, $2, NOW()) RETURNING "id", 1`
+	expectedQuery := `INSERT INTO customers (name, phone, created_at) VALUES ($1, $2, NOW()) RETURNING id, 1`
 	if query != expectedQuery {
 		t.Errorf("bad query: %s", query)
 	}

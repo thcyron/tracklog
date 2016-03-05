@@ -1,5 +1,10 @@
 # Changes
 
+## 3.0.0
+
+* Remove quoting of table and column names introduced in 2.0.0
+  (as a consequence, the `MapSQL`, `ReturnSQL`, and `Quote` methods are gone)
+
 ## 2.0.0
 
 * Add support for `RETURNING` clause

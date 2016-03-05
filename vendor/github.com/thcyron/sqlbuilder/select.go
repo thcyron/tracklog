@@ -25,7 +25,6 @@ type SelectStatement struct {
 type sel struct {
 	col  string
 	dest interface{}
-	raw  bool
 }
 
 type join struct {
@@ -45,16 +44,7 @@ func (s SelectStatement) Map(col string, dest interface{}) SelectStatement {
 	if dest == nil {
 		dest = nullDest
 	}
-	s.selects = append(s.selects, sel{col, dest, false})
-	return s
-}
-
-// MapSQL is Map without quoting col.
-func (s SelectStatement) MapSQL(col string, dest interface{}) SelectStatement {
-	if dest == nil {
-		dest = nullDest
-	}
-	s.selects = append(s.selects, sel{col, dest, true})
+	s.selects = append(s.selects, sel{col, dest})
 	return s
 }
 
@@ -118,11 +108,7 @@ func (s SelectStatement) Build() (query string, args []interface{}, dest []inter
 
 	if len(s.selects) > 0 {
 		for _, sel := range s.selects {
-			col := sel.col
-			if !sel.raw {
-				col = s.dbms.Quote(col)
-			}
-			cols = append(cols, col)
+			cols = append(cols, sel.col)
 			if sel.dest == nil {
 				dest = append(dest, &nullDest)
 			} else {
@@ -133,7 +119,7 @@ func (s SelectStatement) Build() (query string, args []interface{}, dest []inter
 		cols = append(cols, "1")
 		dest = append(dest, &nullDest)
 	}
-	query = "SELECT " + strings.Join(cols, ", ") + " FROM " + s.dbms.Quote(s.table)
+	query = "SELECT " + strings.Join(cols, ", ") + " FROM " + s.table
 
 	for _, join := range s.joins {
 		sql := join.sql

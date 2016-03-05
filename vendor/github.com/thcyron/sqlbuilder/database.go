@@ -1,18 +1,13 @@
 package sqlbuilder
 
-import (
-	"strconv"
-	"strings"
-)
+import "strconv"
 
 // DBMS represents a DBMS.
-type DBMS struct {
-	quote string
-}
+type DBMS int
 
-var (
-	MySQL    = DBMS{quote: "`"}
-	Postgres = DBMS{quote: `"`}
+const (
+	MySQL    DBMS = iota // MySQL
+	Postgres             // Postgres
 )
 
 // Placeholder returns the placeholder string for the given index.
@@ -25,11 +20,6 @@ func (dbms DBMS) Placeholder(idx int) string {
 	default:
 		panic("sqlbuilder: unknown DBMS")
 	}
-}
-
-// Quote returns s quoted.
-func (dbms DBMS) Quote(s string) string {
-	return dbms.quote + strings.Replace(s, dbms.quote, "\\"+dbms.quote, -1) + dbms.quote
 }
 
 // Select returns a new SELECT statement.

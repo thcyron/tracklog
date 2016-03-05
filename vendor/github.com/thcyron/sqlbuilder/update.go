@@ -50,7 +50,7 @@ func (s UpdateStatement) Build() (query string, args []interface{}) {
 		panic("sqlbuilder: no columns set")
 	}
 
-	query = "UPDATE " + s.dbms.Quote(s.table) + " SET "
+	query = "UPDATE " + s.table + " SET "
 	var sets []string
 	idx := 0
 
@@ -63,7 +63,7 @@ func (s UpdateStatement) Build() (query string, args []interface{}) {
 			idx++
 			args = append(args, set.arg)
 		}
-		sets = append(sets, s.dbms.Quote(set.col)+" = "+arg)
+		sets = append(sets, set.col+" = "+arg)
 	}
 	query += strings.Join(sets, ", ")
 
