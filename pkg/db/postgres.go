@@ -29,12 +29,12 @@ func (d *Postgres) UserByID(id int) (*models.User, error) {
 	user := new(models.User)
 
 	query, args, dest := sqlbuilder.Postgres.Select().
-		From("user").
-		Map("id", &user.ID).
-		Map("username", &user.Username).
-		Map("password", &user.Password).
-		Map("password_version", &user.PasswordVersion).
-		Where("id = ?", id).
+		From(`"user"`).
+		Map(`"id"`, &user.ID).
+		Map(`"username"`, &user.Username).
+		Map(`"password"`, &user.Password).
+		Map(`"password_version"`, &user.PasswordVersion).
+		Where(`"id" = ?`, id).
 		Build()
 
 	err := d.db.QueryRow(query, args...).Scan(dest...)
@@ -51,12 +51,12 @@ func (d *Postgres) UserByUsername(username string) (*models.User, error) {
 	user := new(models.User)
 
 	query, args, dest := sqlbuilder.Postgres.Select().
-		From("user").
-		Map("id", &user.ID).
-		Map("username", &user.Username).
-		Map("password", &user.Password).
-		Map("password_version", &user.PasswordVersion).
-		Where("username = ?", username).
+		From(`"user"`).
+		Map(`"id"`, &user.ID).
+		Map(`"username"`, &user.Username).
+		Map(`"password"`, &user.Password).
+		Map(`"password_version"`, &user.PasswordVersion).
+		Where(`"username" = ?`, username).
 		Build()
 
 	err := d.db.QueryRow(query, args...).Scan(dest...)
@@ -73,10 +73,10 @@ func (d *Postgres) AddUser(user *models.User) error {
 	var id int
 
 	query, args, dest := sqlbuilder.Postgres.Insert().
-		Into("user").
-		Set("username", user.Username).
-		Set("password", user.Password).
-		Return("id", &id).
+		Into(`"user"`).
+		Set(`"username"`, user.Username).
+		Set(`"password"`, user.Password).
+		Return(`"id"`, &id).
 		Build()
 
 	err := d.db.QueryRow(query, args...).Scan(dest...)
@@ -90,10 +90,10 @@ func (d *Postgres) AddUser(user *models.User) error {
 
 func (d *Postgres) UpdateUser(user *models.User) error {
 	query, args := sqlbuilder.Postgres.Update().
-		Table("user").
-		Set("username", user.Username).
-		Set("password", user.Password).
-		Set("password_version", user.PasswordVersion).
+		Table(`"user"`).
+		Set(`"username"`, user.Username).
+		Set(`"password"`, user.Password).
+		Set(`"password_version"`, user.PasswordVersion).
 		Build()
 	_, err := d.db.Exec(query, args...)
 	return err
@@ -117,16 +117,16 @@ func (d *Postgres) RecentUserLogs(user *models.User, count int) ([]*models.Log, 
 	)
 
 	query, args, dest := sqlbuilder.Postgres.Select().
-		From("log").
-		Map("id", &log.ID).
-		Map("user_id", &log.UserID).
-		Map("name", &log.Name).
-		Map("start", &log.Start).
-		Map("end", &log.End).
-		Map("duration", &log.Duration).
-		Map("distance", &log.Distance).
-		Where("user_id = ?", user.ID).
-		Order("created DESC").
+		From(`"log"`).
+		Map(`"id"`, &log.ID).
+		Map(`"user_id"`, &log.UserID).
+		Map(`"name"`, &log.Name).
+		Map(`"start"`, &log.Start).
+		Map(`"end"`, &log.End).
+		Map(`"duration"`, &log.Duration).
+		Map(`"distance"`, &log.Distance).
+		Where(`"user_id" = ?`, user.ID).
+		Order(`"created" DESC`).
 		Limit(count).
 		Build()
 
@@ -162,10 +162,10 @@ func (d *Postgres) UserLogYears(user *models.User) ([]int, error) {
 	)
 
 	query, args, dest := sqlbuilder.Postgres.Select().
-		From("log").
-		MapSQL("DISTINCT EXTRACT(YEAR FROM start)", &year).
-		Where("user_id = ?", user.ID).
-		Order("EXTRACT(YEAR FROM start) ASC").
+		From(`"log"`).
+		Map(`DISTINCT EXTRACT(YEAR FROM "start")`, &year).
+		Where(`"user_id" = ?`, user.ID).
+		Order(`EXTRACT(YEAR FROM "start") ASC`).
 		Build()
 
 	rows, err := d.db.Query(query, args...)
@@ -194,16 +194,16 @@ func (d *Postgres) UserLogByID(user *models.User, id int) (*models.Log, error) {
 	log := new(models.Log)
 
 	query, args, dest := sqlbuilder.Postgres.Select().
-		From("log").
-		Map("id", &log.ID).
-		Map("user_id", &log.UserID).
-		Map("name", &log.Name).
-		Map("start", &log.Start).
-		Map("end", &log.End).
-		Map("duration", &log.Duration).
-		Map("distance", &log.Distance).
-		Map("gpx", &log.GPX).
-		Where("id = ?", id).
+		From(`"log"`).
+		Map(`"id"`, &log.ID).
+		Map(`"user_id"`, &log.UserID).
+		Map(`"name"`, &log.Name).
+		Map(`"start"`, &log.Start).
+		Map(`"end"`, &log.End).
+		Map(`"duration"`, &log.Duration).
+		Map(`"distance"`, &log.Distance).
+		Map(`"gpx"`, &log.GPX).
+		Where(`"id" = ?`, id).
 		Build()
 
 	err = tx.QueryRow(query, args...).Scan(dest...)
@@ -231,15 +231,15 @@ func (d *Postgres) getLogTracks(tx *sql.Tx, log *models.Log) error {
 	)
 
 	query, args, dest := sqlbuilder.Postgres.Select().
-		From("track").
-		Map("id", &track.ID).
-		Map("log_id", &track.LogID).
-		MapSQL("COALESCE(name, '')", &track.Name).
-		Map("start", &track.Start).
-		Map("end", &track.End).
-		Map("duration", &track.Duration).
-		Map("distance", &track.Distance).
-		Where("log_id = ?", log.ID).
+		From(`"track"`).
+		Map(`"id"`, &track.ID).
+		Map(`"log_id"`, &track.LogID).
+		Map(`COALESCE("name", '')`, &track.Name).
+		Map(`"start"`, &track.Start).
+		Map(`"end"`, &track.End).
+		Map(`"duration"`, &track.Duration).
+		Map(`"distance"`, &track.Distance).
+		Where(`"log_id" = ?`, log.ID).
 		Build()
 
 	rows, err := tx.Query(query, args...)
@@ -275,15 +275,15 @@ func (d *Postgres) getTrackPoints(tx *sql.Tx, track *models.Track) error {
 	)
 
 	query, args, dest := sqlbuilder.Postgres.Select().
-		From("trackpoint").
-		Map("id", &point.ID).
-		Map("track_id", &point.TrackID).
-		MapSQL("point[0]", &point.Longitude).
-		MapSQL("point[1]", &point.Latitude).
-		Map("time", &point.Time).
-		Map("elevation", &point.Elevation).
-		Map("heartrate", &point.Heartrate).
-		Where("track_id = ?", track.ID).
+		From(`"trackpoint"`).
+		Map(`"id"`, &point.ID).
+		Map(`"track_id"`, &point.TrackID).
+		Map(`"point"[0]`, &point.Longitude).
+		Map(`"point"[1]`, &point.Latitude).
+		Map(`"time"`, &point.Time).
+		Map(`"elevation"`, &point.Elevation).
+		Map(`"heartrate"`, &point.Heartrate).
+		Where(`"track_id" = ?`, track.ID).
 		Build()
 
 	rows, err := tx.Query(query, args...)
@@ -313,9 +313,9 @@ func (d *Postgres) getLogTags(tx *sql.Tx, log *models.Log) error {
 	)
 
 	query, args, dest := sqlbuilder.Postgres.Select().
-		From("log_tag").
-		Map("tag", &tag).
-		Where("log_id = ?", log.ID).
+		From(`"log_tag"`).
+		Map(`"tag"`, &tag).
+		Where(`"log_id" = ?`, log.ID).
 		Build()
 
 	rows, err := tx.Query(query, args...)
@@ -348,17 +348,17 @@ func (d *Postgres) UserLogsByYear(user *models.User, year int) ([]*models.Log, e
 	)
 
 	query, args, dest := sqlbuilder.Postgres.Select().
-		From("log").
-		Map("id", &log.ID).
-		Map("name", &log.Name).
-		Map("start", &log.Start).
-		Map("end", &log.End).
-		Map("duration", &log.Duration).
-		Map("distance", &log.Distance).
-		Map("gpx", &log.GPX).
-		Where("user_id = ?", user.ID).
-		Where("EXTRACT(YEAR FROM start) = ?", year).
-		Order("start DESC").
+		From(`"log"`).
+		Map(`"id"`, &log.ID).
+		Map(`"name"`, &log.Name).
+		Map(`"start"`, &log.Start).
+		Map(`"end"`, &log.End).
+		Map(`"duration"`, &log.Duration).
+		Map(`"distance"`, &log.Distance).
+		Map(`"gpx"`, &log.GPX).
+		Where(`"user_id" = ?`, user.ID).
+		Where(`EXTRACT(YEAR FROM "start") = ?`, year).
+		Order(`"start" DESC`).
 		Build()
 
 	rows, err := tx.Query(query, args...)
@@ -393,15 +393,15 @@ func (d *Postgres) AddUserLog(user *models.User, log *models.Log) error {
 		return err
 	}
 	query, args, dest := sqlbuilder.Postgres.Insert().
-		Into("log").
-		Set("user_id", user.ID).
-		Set("start", log.Start).
-		Set("end", log.End).
-		Set("duration", log.Duration).
-		Set("distance", log.Distance).
-		Set("name", log.Name).
-		Set("gpx", log.GPX).
-		Return("id", &log.ID).
+		Into(`"log"`).
+		Set(`"user_id"`, user.ID).
+		Set(`"start"`, log.Start).
+		Set(`"end"`, log.End).
+		Set(`"duration"`, log.Duration).
+		Set(`"distance"`, log.Distance).
+		Set(`"name"`, log.Name).
+		Set(`"gpx"`, log.GPX).
+		Return(`"id"`, &log.ID).
 		Build()
 
 	if err := tx.QueryRow(query, args...).Scan(dest...); err != nil {
@@ -425,14 +425,14 @@ func (d *Postgres) addLogTrack(tx *sql.Tx, log *models.Log, track *models.Track)
 		name = &track.Name
 	}
 	query, args, dest := sqlbuilder.Postgres.Insert().
-		Into("track").
-		Set("log_id", log.ID).
-		Set("name", name).
-		Set("start", track.Start).
-		Set("end", track.End).
-		Set("duration", track.Duration).
-		Set("distance", track.Distance).
-		Return("id", &track.ID).
+		Into(`"track"`).
+		Set(`"log_id"`, log.ID).
+		Set(`"name"`, name).
+		Set(`"start"`, track.Start).
+		Set(`"end"`, track.End).
+		Set(`"duration"`, track.Duration).
+		Set(`"distance"`, track.Distance).
+		Return(`"id"`, &track.ID).
 		Build()
 
 	if err := tx.QueryRow(query, args...).Scan(dest...); err != nil {
@@ -450,13 +450,13 @@ func (d *Postgres) addLogTrack(tx *sql.Tx, log *models.Log, track *models.Track)
 
 func (d *Postgres) addTrackPoint(tx *sql.Tx, track *models.Track, point *models.Point) error {
 	query, args, dest := sqlbuilder.Postgres.Insert().
-		Into("trackpoint").
-		Set("track_id", track.ID).
-		SetSQL("point", fmt.Sprintf("point(%f,%f)", point.Longitude, point.Latitude)).
-		Set("time", point.Time).
-		Set("elevation", point.Elevation).
-		Set("heartrate", point.Heartrate).
-		Return("id", &point.ID).
+		Into(`"trackpoint"`).
+		Set(`"track_id"`, track.ID).
+		SetSQL(`"point"`, fmt.Sprintf("point(%f,%f)", point.Longitude, point.Latitude)).
+		Set(`"time"`, point.Time).
+		Set(`"elevation"`, point.Elevation).
+		Set(`"heartrate"`, point.Heartrate).
+		Return(`"id"`, &point.ID).
 		Build()
 
 	if err := tx.QueryRow(query, args...).Scan(dest...); err != nil {
@@ -472,9 +472,9 @@ func (d *Postgres) UpdateLog(log *models.Log) error {
 	}
 
 	query, args := sqlbuilder.Postgres.Update().
-		Table("log").
-		Set("name", log.Name).
-		Where("id = ?", log.ID).
+		Table(`"log"`).
+		Set(`"name"`, log.Name).
+		Where(`"id" = ?`, log.ID).
 		Build()
 
 	_, err = tx.Exec(query, args...)
@@ -498,9 +498,9 @@ func (d *Postgres) replaceLogTags(tx *sql.Tx, log *models.Log) error {
 
 	for _, tag := range log.Tags {
 		query, args, _ := sqlbuilder.Postgres.Insert().
-			Into("log_tag").
-			Set("log_id", log.ID).
-			Set("tag", tag).
+			Into(`"log_tag"`).
+			Set(`"log_id"`, log.ID).
+			Set(`"tag"`, tag).
 			Build()
 		_, err = tx.Exec(query, args...)
 		if err != nil {
