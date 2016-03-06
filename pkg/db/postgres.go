@@ -28,7 +28,8 @@ func (d *Postgres) Open(dsn string) error {
 func (d *Postgres) UserByID(id int) (*models.User, error) {
 	user := new(models.User)
 
-	query, args, dest := sqlbuilder.Postgres.Select().
+	query, args, dest := sqlbuilder.Select().
+		Dialect(sqlbuilder.Postgres).
 		From(`"user"`).
 		Map(`"id"`, &user.ID).
 		Map(`"username"`, &user.Username).
@@ -50,7 +51,8 @@ func (d *Postgres) UserByID(id int) (*models.User, error) {
 func (d *Postgres) UserByUsername(username string) (*models.User, error) {
 	user := new(models.User)
 
-	query, args, dest := sqlbuilder.Postgres.Select().
+	query, args, dest := sqlbuilder.Select().
+		Dialect(sqlbuilder.Postgres).
 		From(`"user"`).
 		Map(`"id"`, &user.ID).
 		Map(`"username"`, &user.Username).
@@ -72,7 +74,8 @@ func (d *Postgres) UserByUsername(username string) (*models.User, error) {
 func (d *Postgres) AddUser(user *models.User) error {
 	var id int
 
-	query, args, dest := sqlbuilder.Postgres.Insert().
+	query, args, dest := sqlbuilder.Insert().
+		Dialect(sqlbuilder.Postgres).
 		Into(`"user"`).
 		Set(`"username"`, user.Username).
 		Set(`"password"`, user.Password).
@@ -89,7 +92,8 @@ func (d *Postgres) AddUser(user *models.User) error {
 }
 
 func (d *Postgres) UpdateUser(user *models.User) error {
-	query, args := sqlbuilder.Postgres.Update().
+	query, args := sqlbuilder.Update().
+		Dialect(sqlbuilder.Postgres).
 		Table(`"user"`).
 		Set(`"username"`, user.Username).
 		Set(`"password"`, user.Password).
@@ -116,7 +120,8 @@ func (d *Postgres) RecentUserLogs(user *models.User, count int) ([]*models.Log, 
 		logs []*models.Log
 	)
 
-	query, args, dest := sqlbuilder.Postgres.Select().
+	query, args, dest := sqlbuilder.Select().
+		Dialect(sqlbuilder.Postgres).
 		From(`"log"`).
 		Map(`"id"`, &log.ID).
 		Map(`"user_id"`, &log.UserID).
@@ -161,7 +166,8 @@ func (d *Postgres) UserLogYears(user *models.User) ([]int, error) {
 		year  int
 	)
 
-	query, args, dest := sqlbuilder.Postgres.Select().
+	query, args, dest := sqlbuilder.Select().
+		Dialect(sqlbuilder.Postgres).
 		From(`"log"`).
 		Map(`DISTINCT EXTRACT(YEAR FROM "start")`, &year).
 		Where(`"user_id" = ?`, user.ID).
@@ -193,7 +199,8 @@ func (d *Postgres) UserLogByID(user *models.User, id int) (*models.Log, error) {
 
 	log := new(models.Log)
 
-	query, args, dest := sqlbuilder.Postgres.Select().
+	query, args, dest := sqlbuilder.Select().
+		Dialect(sqlbuilder.Postgres).
 		From(`"log"`).
 		Map(`"id"`, &log.ID).
 		Map(`"user_id"`, &log.UserID).
@@ -230,7 +237,8 @@ func (d *Postgres) getLogTracks(tx *sql.Tx, log *models.Log) error {
 		tracks []*models.Track
 	)
 
-	query, args, dest := sqlbuilder.Postgres.Select().
+	query, args, dest := sqlbuilder.Select().
+		Dialect(sqlbuilder.Postgres).
 		From(`"track"`).
 		Map(`"id"`, &track.ID).
 		Map(`"log_id"`, &track.LogID).
@@ -274,7 +282,8 @@ func (d *Postgres) getTrackPoints(tx *sql.Tx, track *models.Track) error {
 		points []*models.Point
 	)
 
-	query, args, dest := sqlbuilder.Postgres.Select().
+	query, args, dest := sqlbuilder.Select().
+		Dialect(sqlbuilder.Postgres).
 		From(`"trackpoint"`).
 		Map(`"id"`, &point.ID).
 		Map(`"track_id"`, &point.TrackID).
@@ -312,7 +321,8 @@ func (d *Postgres) getLogTags(tx *sql.Tx, log *models.Log) error {
 		tags []string
 	)
 
-	query, args, dest := sqlbuilder.Postgres.Select().
+	query, args, dest := sqlbuilder.Select().
+		Dialect(sqlbuilder.Postgres).
 		From(`"log_tag"`).
 		Map(`"tag"`, &tag).
 		Where(`"log_id" = ?`, log.ID).
@@ -347,7 +357,8 @@ func (d *Postgres) UserLogsByYear(user *models.User, year int) ([]*models.Log, e
 		logs []*models.Log
 	)
 
-	query, args, dest := sqlbuilder.Postgres.Select().
+	query, args, dest := sqlbuilder.Select().
+		Dialect(sqlbuilder.Postgres).
 		From(`"log"`).
 		Map(`"id"`, &log.ID).
 		Map(`"name"`, &log.Name).
@@ -392,7 +403,8 @@ func (d *Postgres) AddUserLog(user *models.User, log *models.Log) error {
 	if err != nil {
 		return err
 	}
-	query, args, dest := sqlbuilder.Postgres.Insert().
+	query, args, dest := sqlbuilder.Insert().
+		Dialect(sqlbuilder.Postgres).
 		Into(`"log"`).
 		Set(`"user_id"`, user.ID).
 		Set(`"start"`, log.Start).
@@ -424,7 +436,8 @@ func (d *Postgres) addLogTrack(tx *sql.Tx, log *models.Log, track *models.Track)
 	if track.Name != "" {
 		name = &track.Name
 	}
-	query, args, dest := sqlbuilder.Postgres.Insert().
+	query, args, dest := sqlbuilder.Insert().
+		Dialect(sqlbuilder.Postgres).
 		Into(`"track"`).
 		Set(`"log_id"`, log.ID).
 		Set(`"name"`, name).
@@ -449,7 +462,8 @@ func (d *Postgres) addLogTrack(tx *sql.Tx, log *models.Log, track *models.Track)
 }
 
 func (d *Postgres) addTrackPoint(tx *sql.Tx, track *models.Track, point *models.Point) error {
-	query, args, dest := sqlbuilder.Postgres.Insert().
+	query, args, dest := sqlbuilder.Insert().
+		Dialect(sqlbuilder.Postgres).
 		Into(`"trackpoint"`).
 		Set(`"track_id"`, track.ID).
 		SetSQL(`"point"`, fmt.Sprintf("point(%f,%f)", point.Longitude, point.Latitude)).
@@ -471,7 +485,8 @@ func (d *Postgres) UpdateLog(log *models.Log) error {
 		return nil
 	}
 
-	query, args := sqlbuilder.Postgres.Update().
+	query, args := sqlbuilder.Update().
+		Dialect(sqlbuilder.Postgres).
 		Table(`"log"`).
 		Set(`"name"`, log.Name).
 		Where(`"id" = ?`, log.ID).
@@ -497,7 +512,8 @@ func (d *Postgres) replaceLogTags(tx *sql.Tx, log *models.Log) error {
 	}
 
 	for _, tag := range log.Tags {
-		query, args, _ := sqlbuilder.Postgres.Insert().
+		query, args, _ := sqlbuilder.Insert().
+			Dialect(sqlbuilder.Postgres).
 			Into(`"log_tag"`).
 			Set(`"log_id"`, log.ID).
 			Set(`"tag"`, tag).

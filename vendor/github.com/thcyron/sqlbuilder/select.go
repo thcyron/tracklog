@@ -7,9 +7,14 @@ import (
 
 var nullDest interface{}
 
+// Select returns a new SELECT statement with the default dialect.
+func Select() SelectStatement {
+	return SelectStatement{dialect: DefaultDialect}
+}
+
 // SelectStatement represents a SELECT statement.
 type SelectStatement struct {
-	dbms    DBMS
+	dialect Dialect
 	table   string
 	selects []sel
 	joins   []join
@@ -30,6 +35,12 @@ type sel struct {
 type join struct {
 	sql  string
 	args []interface{}
+}
+
+// Dialect returns a new statement with dialect set to 'dialect'.
+func (s SelectStatement) Dialect(dialect Dialect) SelectStatement {
+	s.dialect = dialect
+	return s
 }
 
 // From returns a new statement with the table to select from set to 'table'.
@@ -124,7 +135,7 @@ func (s SelectStatement) Build() (query string, args []interface{}, dest []inter
 	for _, join := range s.joins {
 		sql := join.sql
 		for _, arg := range join.args {
-			sql = strings.Replace(sql, "?", s.dbms.Placeholder(idx), 1)
+			sql = strings.Replace(sql, "?", s.dialect.Placeholder(idx), 1)
 			idx++
 			args = append(args, arg)
 		}
@@ -136,7 +147,7 @@ func (s SelectStatement) Build() (query string, args []interface{}, dest []inter
 		for _, where := range s.wheres {
 			sql := "(" + where.sql + ")"
 			for _, arg := range where.args {
-				sql = strings.Replace(sql, "?", s.dbms.Placeholder(idx), 1)
+				sql = strings.Replace(sql, "?", s.dialect.Placeholder(idx), 1)
 				idx++
 				args = append(args, arg)
 			}

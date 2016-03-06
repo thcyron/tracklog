@@ -2,6 +2,11 @@ package sqlbuilder
 
 import "strings"
 
+// Insert returns a new INSERT statement with the default dialect.
+func Insert() InsertStatement {
+	return InsertStatement{dialect: DefaultDialect}
+}
+
 type insertSet struct {
 	col string
 	arg interface{}
@@ -15,10 +20,16 @@ type insertRet struct {
 
 // InsertStatement represents an INSERT statement.
 type InsertStatement struct {
-	dbms  DBMS
-	table string
-	sets  []insertSet
-	rets  []insertRet
+	dialect Dialect
+	table   string
+	sets    []insertSet
+	rets    []insertRet
+}
+
+// Dialect returns a new statement with dialect set to 'dialect'.
+func (s InsertStatement) Dialect(dialect Dialect) InsertStatement {
+	s.dialect = dialect
+	return s
 }
 
 // Into returns a new statement with the table to insert into set to 'table'.
@@ -57,7 +68,7 @@ func (s InsertStatement) Build() (query string, args []interface{}, dest []inter
 			vals = append(vals, set.arg.(string))
 		} else {
 			args = append(args, set.arg)
-			vals = append(vals, s.dbms.Placeholder(idx))
+			vals = append(vals, s.dialect.Placeholder(idx))
 			idx++
 		}
 	}

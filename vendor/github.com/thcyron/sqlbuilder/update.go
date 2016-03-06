@@ -4,6 +4,11 @@ import (
 	"strings"
 )
 
+// Update returns a new UPDATE statement with the default dialect.
+func Update() UpdateStatement {
+	return UpdateStatement{dialect: DefaultDialect}
+}
+
 type updateSet struct {
 	col string
 	arg interface{}
@@ -12,11 +17,17 @@ type updateSet struct {
 
 // UpdateStatement represents an UPDATE statement.
 type UpdateStatement struct {
-	dbms   DBMS
-	table  string
-	sets   []updateSet
-	wheres []where
-	args   []interface{}
+	dialect Dialect
+	table   string
+	sets    []updateSet
+	wheres  []where
+	args    []interface{}
+}
+
+// Dialect returns a new statement with dialect set to 'dialect'.
+func (s UpdateStatement) Dialect(dialect Dialect) UpdateStatement {
+	s.dialect = dialect
+	return s
 }
 
 // Table returns a new statement with the table to update set to 'table'.
@@ -59,7 +70,7 @@ func (s UpdateStatement) Build() (query string, args []interface{}) {
 		if set.raw {
 			arg = set.arg.(string)
 		} else {
-			arg = s.dbms.Placeholder(idx)
+			arg = s.dialect.Placeholder(idx)
 			idx++
 			args = append(args, set.arg)
 		}
@@ -73,7 +84,7 @@ func (s UpdateStatement) Build() (query string, args []interface{}) {
 		for _, w := range s.wheres {
 			sql := "(" + w.sql + ")"
 			for _, arg := range w.args {
-				p := s.dbms.Placeholder(idx)
+				p := s.dialect.Placeholder(idx)
 				idx++
 				sql = strings.Replace(sql, "?", p, 1)
 				sqls = append(sqls, sql)

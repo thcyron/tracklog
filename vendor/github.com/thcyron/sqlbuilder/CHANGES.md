@@ -4,6 +4,9 @@
 
 * Remove quoting of table and column names introduced in 2.0.0
   (as a consequence, the `MapSQL`, `ReturnSQL`, and `Quote` methods are gone)
+* Introduce dialects (replacing DBMS)
+
+Version 3 is not compatible with version 1 and 2.
 
 ## 2.0.0
 

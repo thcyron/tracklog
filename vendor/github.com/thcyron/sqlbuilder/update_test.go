@@ -6,7 +6,8 @@ import (
 )
 
 func TestUpdateMySQL(t *testing.T) {
-	query, args := MySQL.Update().
+	query, args := Update().
+		Dialect(MySQL).
 		Table("customers").
 		Set("name", "John").
 		Set("phone", "555").
@@ -24,7 +25,8 @@ func TestUpdateMySQL(t *testing.T) {
 }
 
 func TestUpdatePostgres(t *testing.T) {
-	query, args := Postgres.Update().
+	query, args := Update().
+		Dialect(Postgres).
 		Table("customers").
 		Set("name", "John").
 		Set("phone", "555").
@@ -42,7 +44,8 @@ func TestUpdatePostgres(t *testing.T) {
 }
 
 func TestUpdateWithWhereMySQL(t *testing.T) {
-	query, args := MySQL.Update().
+	query, args := Update().
+		Dialect(MySQL).
 		Table("customers").
 		Set("name", "John").
 		Set("phone", "555").
@@ -61,7 +64,8 @@ func TestUpdateWithWhereMySQL(t *testing.T) {
 }
 
 func TestUpdateWithWherePostgres(t *testing.T) {
-	query, args := Postgres.Update().
+	query, args := Update().
+		Dialect(Postgres).
 		Table("customers").
 		Set("name", "John").
 		Set("phone", "555").
@@ -80,7 +84,7 @@ func TestUpdateWithWherePostgres(t *testing.T) {
 }
 
 func TestUpdateReuse(t *testing.T) {
-	baseStatement := MySQL.Update().Table("customers").Set("name", "John")
+	baseStatement := Update().Dialect(MySQL).Table("customers").Set("name", "John")
 
 	query, args := baseStatement.Set("phone", "555").Build()
 	expectedQuery := "UPDATE customers SET name = ?, phone = ?"

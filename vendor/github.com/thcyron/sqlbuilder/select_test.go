@@ -14,7 +14,8 @@ type customer struct {
 func TestSimpleSelect(t *testing.T) {
 	c := customer{}
 
-	query, _, dest := MySQL.Select().
+	query, _, dest := Select().
+		Dialect(MySQL).
 		From("customers").
 		Map("id", &c.ID).
 		Map("name", &c.Name).
@@ -36,7 +37,8 @@ func TestSimpleSelect(t *testing.T) {
 func TestSimpleSelectWithLimitOffset(t *testing.T) {
 	c := customer{}
 
-	query, _, dest := MySQL.Select().
+	query, _, dest := Select().
+		Dialect(MySQL).
 		From("customers").
 		Map("id", &c.ID).
 		Map("name", &c.Name).
@@ -59,7 +61,8 @@ func TestSimpleSelectWithLimitOffset(t *testing.T) {
 func TestSimpleSelectWithJoins(t *testing.T) {
 	c := customer{}
 
-	query, _, _ := MySQL.Select().
+	query, _, _ := Select().
+		Dialect(MySQL).
 		From("customers").
 		Map("id", &c.ID).
 		Map("name", &c.Name).
@@ -77,7 +80,8 @@ func TestSimpleSelectWithJoins(t *testing.T) {
 func TestSelectWithWhereMySQL(t *testing.T) {
 	c := customer{}
 
-	query, args, _ := MySQL.Select().
+	query, args, _ := Select().
+		Dialect(MySQL).
 		From("customers").
 		Map("id", &c.ID).
 		Map("name", &c.Name).
@@ -98,7 +102,7 @@ func TestSelectWithWhereMySQL(t *testing.T) {
 
 func TestSelectWithGroupMySQL(t *testing.T) {
 	var count uint
-	query, _, _ := MySQL.Select().From("customers").Map("COUNT(*)", &count).Group("city").Build()
+	query, _, _ := Select().Dialect(MySQL).From("customers").Map("COUNT(*)", &count).Group("city").Build()
 	expectedQuery := "SELECT COUNT(*) FROM customers GROUP BY city"
 	if query != expectedQuery {
 		t.Errorf("bad query: %s", query)
@@ -108,7 +112,8 @@ func TestSelectWithGroupMySQL(t *testing.T) {
 func TestSelectWithWherePostgres(t *testing.T) {
 	c := customer{}
 
-	query, args, _ := Postgres.Select().
+	query, args, _ := Select().
+		Dialect(Postgres).
 		From("customers").
 		Map("id", &c.ID).
 		Map("name", &c.Name).

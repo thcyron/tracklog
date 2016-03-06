@@ -6,7 +6,8 @@ import (
 )
 
 func TestInsertMySQL(t *testing.T) {
-	query, args, _ := MySQL.Insert().
+	query, args, _ := Insert().
+		Dialect(MySQL).
 		Into("customers").
 		Set("name", "John").
 		Set("phone", "555").
@@ -25,7 +26,8 @@ func TestInsertMySQL(t *testing.T) {
 }
 
 func TestInsertPostgres(t *testing.T) {
-	query, args, _ := Postgres.Insert().
+	query, args, _ := Insert().
+		Dialect(Postgres).
 		Into("customers").
 		Set("name", "John").
 		Set("phone", "555").
@@ -46,7 +48,8 @@ func TestInsertPostgres(t *testing.T) {
 func TestInsertReturningPostgres(t *testing.T) {
 	var id, one uint
 
-	query, args, dest := Postgres.Insert().
+	query, args, dest := Insert().
+		Dialect(Postgres).
 		Into("customers").
 		Set("name", "John").
 		Set("phone", "555").

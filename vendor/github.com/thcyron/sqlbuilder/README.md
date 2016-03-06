@@ -5,7 +5,9 @@ sqlbuilder
 
 `sqlbuilder` is a Go library for building SQL queries.
 
-The current version is [2.0.0](https://github.com/thcyron/sqlbuilder/tree/v2.0.0/).
+The master branch tracks version 3. The latest stable version is
+[2.0.0](https://github.com/thcyron/sqlbuilder/tree/v2.0.0/).
+
 `sqlbuilder` follows [Semantic Versioning](http://semver.org/).
 
 Installation
@@ -34,7 +36,7 @@ err := db.QueryRow(query, args...).Scan(dest...)
 **INSERT**
 
 ```go
-query, args := sqlbuilder.Insert().
+query, args, dest := sqlbuilder.Insert().
         Into("customers").
         Set("name", "John").
         Set("phone", "555").
@@ -54,38 +56,29 @@ query, args := sqlbuilder.Update().
 err := db.Exec(query, args...)
 ```
 
-Supported DBMS
---------------
+Supported Dialects
+------------------
 
-`sqlbuilder` supports building queries for MySQL and Postgres databases. You
-can set the default DBMS used by the package-level Select, Update and Insert
-functions with:
+`sqlbuilder` supports building queries for MySQL, SQLite, and Postgres databases. You
+can set the default dialect with:
 
 ```go
-sqlbuilder.DefaultDBMS = sqlbuilder.Postgres
+sqlbuilder.DefaultDialect = sqlbuilder.Postgres
 sqlbuilder.Select().From("...")...
 ```
 
-or you can specify the DBMS explicitly:
+or you can specify the dialect explicitly:
 
 ```go
-sqlbuilder.Postgres.Select().From("...")...
-```
-
-You typically set the default DBMS in `init()`:
-
-```go
-func init() {
-        sqlbuilder.DefaultDBMS = sqlbuilder.Postgres
-}
+sqlbuilder.Select().Dialect(sqlbuilder.Postgres).From("...")...
 ```
 
 Documentation
 -------------
 
-Documentation is available at [Godoc](http://godoc.org/github.com/thcyron/sqlbuilder).
+Documentation is available at [GoDoc](https://godoc.org/github.com/thcyron/sqlbuilder).
 
 License
 -------
 
-`sqlbuilder` is licensed under the MIT license.
+`sqlbuilder` is licensed under the MIT License.
