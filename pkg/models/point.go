@@ -1,6 +1,7 @@
 package models
 
 import (
+	"math"
 	"time"
 
 	"github.com/thcyron/gpx"
@@ -35,4 +36,14 @@ func NewPoint(point gpx.Point) *Point {
 
 func (p *Point) DistanceTo(p2 *Point) float64 {
 	return utils.Haversine(p.Latitude, p.Longitude, p2.Latitude, p2.Longitude)
+}
+
+func (p *Point) SpeedTo(p2 *Point) float64 {
+	dist := p.DistanceTo(p2)
+	dur := p.Time.Sub(p2.Time).Seconds()
+	speed := float64(dist) / float64(dur)
+	if math.IsInf(speed, 0) {
+		speed = 0
+	}
+	return speed
 }

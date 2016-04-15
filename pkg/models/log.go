@@ -2,6 +2,7 @@ package models
 
 import (
 	"bytes"
+	"math"
 	"time"
 
 	"github.com/thcyron/gpx"
@@ -58,9 +59,9 @@ func NewLog(name string, data []byte) (*Log, error) {
 
 // Speed returns the speed in meters per second.
 func (log *Log) Speed() float64 {
-	sec := log.Duration
-	if sec == 0 {
-		return 0
+	speed := float64(log.Distance) / float64(log.Duration)
+	if math.IsInf(speed, 0) {
+		speed = 0
 	}
-	return float64(log.Distance) / float64(sec)
+	return speed
 }

@@ -295,15 +295,13 @@ func (s *Server) HandleGetLog(w http.ResponseWriter, r *http.Request) {
 			}
 			if i > 0 {
 				lastPoint := points[i-1]
-				distance := point.DistanceTo(lastPoint)
-				cumDistance += distance
+				cumDistance += point.DistanceTo(lastPoint)
 				p.CumulatedDistance = cumDistance
-				p.Speed = distance / point.Time.Sub(lastPoint.Time).Seconds()
+				p.Speed = point.SpeedTo(lastPoint)
 			} else if len(points) > 1 {
 				nextPoint := points[i+1]
-				distance := point.DistanceTo(nextPoint)
 				p.CumulatedDistance = cumDistance
-				p.Speed = distance / nextPoint.Time.Sub(point.Time).Seconds()
+				p.Speed = nextPoint.SpeedTo(point)
 			}
 			ps = append(ps, p)
 		}
