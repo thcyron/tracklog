@@ -59,7 +59,50 @@ func (d Document) End() time.Time {
 
 // Metadata provides additional information about a GPX document.
 type Metadata struct {
-	Time time.Time
+	Name        string
+	Description string
+	Author      Person
+	Copyright   Copyright
+	Link        Link
+	Time        time.Time
+	Keywords    string
+	Bounds      Bounds
+	Extensions  []xml.Token
+}
+
+// Person represents a person.
+type Person struct {
+	Name  string
+	Email Email
+	Link  Link
+}
+
+// Email represents an email address.
+type Email struct {
+	ID     string
+	Domain string
+}
+
+// Link represents a link.
+type Link struct {
+	Href string
+	Text string
+	Type string
+}
+
+// Copyright provides information about the copyright holder and license.
+type Copyright struct {
+	Author  string
+	Year    int
+	License string
+}
+
+// Bounds provides information about the document bounds.
+type Bounds struct {
+	MinLatitude  float64
+	MinLongitude float64
+	MaxLatitude  float64
+	MaxLongitude float64
 }
 
 // Track represents a track.
@@ -262,6 +305,48 @@ func (d *Decoder) consumeMetadata(se xml.StartElement) (metadata Metadata, err e
 					return metadata, err
 				}
 				metadata.Time = t
+			case "name":
+				s, err := d.ts.consumeString()
+				if err != nil {
+					return metadata, err
+				}
+				metadata.Name = s
+			case "desc":
+				s, err := d.ts.consumeString()
+				if err != nil {
+					return metadata, err
+				}
+				metadata.Description = s
+			case "link":
+				link, err := d.consumeLink(se)
+				if err != nil {
+					return metadata, err
+				}
+				metadata.Link = link
+			case "keywords":
+				s, err := d.ts.consumeString()
+				if err != nil {
+					return metadata, err
+				}
+				metadata.Keywords = s
+			case "copyright":
+				copyright, err := d.consumeCopyright(se)
+				if err != nil {
+					return metadata, err
+				}
+				metadata.Copyright = copyright
+			case "bounds":
+				bounds, err := d.consumeBounds(se)
+				if err != nil {
+					return metadata, err
+				}
+				metadata.Bounds = bounds
+			case "author":
+				person, err := d.consumePerson(se)
+				if err != nil {
+					return metadata, err
+				}
+				metadata.Author = person
 			default:
 				if err := d.ts.skipTag(); err != nil {
 					return metadata, err
@@ -269,6 +354,223 @@ func (d *Decoder) consumeMetadata(se xml.StartElement) (metadata Metadata, err e
 			}
 		case xml.EndElement:
 			return metadata, nil
+		}
+	}
+}
+
+func (d *Decoder) consumeLink(se xml.StartElement) (link Link, err error) {
+	for _, a := range se.Attr {
+		switch a.Name.Local {
+		case "href":
+			link.Href = a.Value
+		}
+	}
+
+	for {
+		tok, err := d.ts.Token()
+		if err != nil {
+			return link, err
+		}
+		switch tok.(type) {
+		case xml.StartElement:
+			se := tok.(xml.StartElement)
+			switch se.Name.Local {
+			case "text":
+				s, err := d.ts.consumeString()
+				if err != nil {
+					return link, err
+				}
+				link.Text = s
+			case "type":
+				s, err := d.ts.consumeString()
+				if err != nil {
+					return link, err
+				}
+				link.Type = s
+			default:
+				if err := d.ts.skipTag(); err != nil {
+					return link, err
+				}
+			}
+		case xml.EndElement:
+			return link, nil
+		}
+	}
+}
+
+func (d *Decoder) consumeCopyright(se xml.StartElement) (copyright Copyright, err error) {
+	for _, a := range se.Attr {
+		switch a.Name.Local {
+		case "author":
+			copyright.Author = a.Value
+		}
+	}
+
+	for {
+		tok, err := d.ts.Token()
+		if err != nil {
+			return copyright, err
+		}
+		switch tok.(type) {
+		case xml.StartElement:
+			se := tok.(xml.StartElement)
+			switch se.Name.Local {
+			case "year":
+				i, err := d.ts.consumeInt()
+				if err != nil {
+					return copyright, err
+				}
+				copyright.Year = i
+			case "license":
+				s, err := d.ts.consumeString()
+				if err != nil {
+					return copyright, err
+				}
+				copyright.License = s
+			default:
+				if err := d.ts.skipTag(); err != nil {
+					return copyright, err
+				}
+			}
+		case xml.EndElement:
+			return copyright, nil
+		}
+	}
+}
+
+func (d *Decoder) consumeBounds(se xml.StartElement) (bounds Bounds, err error) {
+	for _, a := range se.Attr {
+		switch a.Name.Local {
+		case "minlat":
+			minlat, err := strconv.ParseFloat(a.Value, 64)
+			if err == nil {
+				bounds.MinLatitude = minlat
+			} else if d.Strict {
+				return bounds, fmt.Errorf("gpx: invalid <bounds> minlat: %s", err)
+			}
+		case "maxlat":
+			maxlat, err := strconv.ParseFloat(a.Value, 64)
+			if err == nil {
+				bounds.MaxLatitude = maxlat
+			} else if d.Strict {
+				return bounds, fmt.Errorf("gpx: invalid <bounds> maxlat: %s", err)
+			}
+		case "minlon":
+			minlon, err := strconv.ParseFloat(a.Value, 64)
+			if err == nil {
+				bounds.MinLongitude = minlon
+			} else if d.Strict {
+				return bounds, fmt.Errorf("gpx: invalid <bounds> minlon: %s", err)
+			}
+		case "maxlon":
+			maxlon, err := strconv.ParseFloat(a.Value, 64)
+			if err == nil {
+				bounds.MaxLongitude = maxlon
+			} else if d.Strict {
+				return bounds, fmt.Errorf("gpx: invalid <bounds> maxlon: %s", err)
+			}
+		}
+	}
+
+	if d.Strict {
+		tok, err := d.ts.Token()
+		if err != nil {
+			return bounds, err
+		}
+		if _, ok := tok.(xml.EndElement); !ok {
+			return bounds, fmt.Errorf("gpx: <bounds> not a self-closing element")
+		}
+		return bounds, nil
+	}
+
+	for {
+		tok, err := d.ts.Token()
+		if err != nil {
+			return bounds, err
+		}
+		switch tok.(type) {
+		case xml.StartElement:
+			if err := d.ts.skipTag(); err != nil {
+				return bounds, err
+			}
+		case xml.EndElement:
+			return bounds, nil
+		}
+	}
+}
+
+func (d *Decoder) consumePerson(se xml.StartElement) (person Person, err error) {
+	for {
+		tok, err := d.ts.Token()
+		if err != nil {
+			return person, err
+		}
+		switch tok.(type) {
+		case xml.StartElement:
+			se := tok.(xml.StartElement)
+			switch se.Name.Local {
+			case "name":
+				name, err := d.ts.consumeString()
+				if err != nil {
+					return person, err
+				}
+				person.Name = name
+			case "email":
+				email, err := d.consumeEmail(se)
+				if err != nil {
+					return person, err
+				}
+				person.Email = email
+			case "link":
+				link, err := d.consumeLink(se)
+				if err != nil {
+					return person, err
+				}
+				person.Link = link
+			default:
+				if err := d.ts.skipTag(); err != nil {
+					return person, err
+				}
+			}
+		case xml.EndElement:
+			return person, nil
+		}
+	}
+}
+
+func (d *Decoder) consumeEmail(se xml.StartElement) (email Email, err error) {
+	for _, a := range se.Attr {
+		switch a.Name.Local {
+		case "id":
+			email.ID = a.Value
+		case "domain":
+			email.Domain = a.Value
+		}
+	}
+
+	if d.Strict {
+		tok, err := d.ts.Token()
+		if err != nil {
+			return email, err
+		}
+		if _, ok := tok.(xml.EndElement); !ok {
+			return email, fmt.Errorf("gpx: <email> not a self-closing element")
+		}
+		return email, nil
+	}
+
+	for {
+		tok, err := d.ts.Token()
+		if err != nil {
+			return email, err
+		}
+		switch tok.(type) {
+		case xml.StartElement:
+			if err := d.ts.skipTag(); err != nil {
+				return email, err
+			}
+		case xml.EndElement:
+			return email, nil
 		}
 	}
 }

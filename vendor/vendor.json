@@ -1,0 +1,121 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "dnj6px0tS6k2tKIqK4wCW+4bXjk=",
+			"path": "github.com/codegangsta/negroni",
+			"revision": "c7477ad8e330bef55bf1ebe300cf8aa67c492d1b",
+			"revisionTime": "2015-03-19T17:13:04Z"
+		},
+		{
+			"checksumSHA1": "7oJyGPn6FhDZeJy9wuWqWSQ5XFM=",
+			"path": "github.com/dgrijalva/jwt-go",
+			"revision": "a2c85815a77d0f951e33ba4db5ae93629a1530af",
+			"revisionTime": "2016-04-13T00:36:00Z"
+		},
+		{
+			"checksumSHA1": "iIUYZyoanCQQTUaWsu8b+iOSPt4=",
+			"path": "github.com/gorilla/context",
+			"revision": "1ea25387ff6f684839d82767c1733ff4d4d15d0a",
+			"revisionTime": "2016-02-26T21:46:23Z"
+		},
+		{
+			"checksumSHA1": "ozzcA3rbEq8KvRD8CjEWAZGVwo4=",
+			"path": "github.com/gorilla/csrf",
+			"revision": "58276522e5876c9497f406c0212e46f8c7b9999d",
+			"revisionTime": "2016-04-14T15:59:25Z"
+		},
+		{
+			"checksumSHA1": "flNRZk3oyHmsux8UsGbj7ziYtUo=",
+			"path": "github.com/gorilla/handlers",
+			"revision": "66e6c6f01d8da976ee113437745ca029c2b585a6",
+			"revisionTime": "2016-04-10T18:53:17Z"
+		},
+		{
+			"checksumSHA1": "SGSXlSU1TFtg5aTlVA9v4Ka86lU=",
+			"path": "github.com/gorilla/securecookie",
+			"revision": "8dacca26977607e637262eb66b15b7d39f2d3009",
+			"revisionTime": "2016-02-26T21:31:13Z"
+		},
+		{
+			"checksumSHA1": "mZK+4q1Xr8z0AwkCAgO+7Rb8xk8=",
+			"path": "github.com/julienschmidt/httprouter",
+			"revision": "77366a47451a56bb3ba682481eed85b64fea14e8",
+			"revisionTime": "2016-02-19T15:40:26Z"
+		},
+		{
+			"checksumSHA1": "xB64naNkKuwFKUPkmdwdyY2mN6o=",
+			"path": "github.com/lib/pq",
+			"revision": "3cd0097429be7d611bb644ef85b42bfb102ceea4",
+			"revisionTime": "2016-03-14T19:42:24Z"
+		},
+		{
+			"checksumSHA1": "xppHi82MLqVx1eyQmbhTesAEjx8=",
+			"path": "github.com/lib/pq/oid",
+			"revision": "3cd0097429be7d611bb644ef85b42bfb102ceea4",
+			"revisionTime": "2016-03-14T19:42:24Z"
+		},
+		{
+			"checksumSHA1": "A6nZdZ1/lTOVINhIndyw2ZWN9JU=",
+			"path": "github.com/naoina/go-stringutil",
+			"revision": "6b638e95a32d0c1131db0e7fe83775cbea4a0d0b",
+			"revisionTime": "2015-11-18T23:44:43Z"
+		},
+		{
+			"checksumSHA1": "MUYxtCY95dt/b/5cmzP0x1b9d/E=",
+			"path": "github.com/naoina/toml",
+			"revision": "751171607256bb66e64c9f0220c00662420c38e9",
+			"revisionTime": "2015-07-27T12:48:37Z"
+		},
+		{
+			"checksumSHA1": "6Sd81okp0F1ByCD/xCP9L1+v4Xs=",
+			"path": "github.com/naoina/toml/ast",
+			"revision": "751171607256bb66e64c9f0220c00662420c38e9",
+			"revisionTime": "2015-07-27T12:48:37Z"
+		},
+		{
+			"checksumSHA1": "VloJV7E8CzK76Bqpij1IS7pqD/k=",
+			"path": "github.com/thcyron/gpx",
+			"revision": "f95a7bb694cccb3d1288ffe4f18302e6ca42c8c2",
+			"revisionTime": "2016-02-10T22:34:02Z"
+		},
+		{
+			"checksumSHA1": "xv86DjJGs8CCWtjM9Il5dZ0UEcc=",
+			"path": "github.com/thcyron/sqlbuilder",
+			"revision": "609a1abb836e7c9942de61f7149f576280885e76",
+			"revisionTime": "2016-03-07T21:02:01Z"
+		},
+		{
+			"checksumSHA1": "fszYkOsmWLBCDH+p5drK1eMeZCA=",
+			"path": "github.com/thcyron/sqlbuilder/mysql",
+			"revision": "609a1abb836e7c9942de61f7149f576280885e76",
+			"revisionTime": "2016-03-07T21:02:01Z"
+		},
+		{
+			"checksumSHA1": "7O4Y2LQ2u/JPdreZ+Bw7hICtKm0=",
+			"path": "github.com/thcyron/sqlbuilder/postgres",
+			"revision": "609a1abb836e7c9942de61f7149f576280885e76",
+			"revisionTime": "2016-03-07T21:02:01Z"
+		},
+		{
+			"checksumSHA1": "vE43s37+4CJ2CDU6TlOUOYE0K9c=",
+			"path": "golang.org/x/crypto/bcrypt",
+			"revision": "1777f3ba8c1fed80fcaec3317e3aaa4f627764d2",
+			"revisionTime": "2016-03-18T12:12:46Z"
+		},
+		{
+			"checksumSHA1": "udD2DzUPFZbMVXP0VNADhef4zKk=",
+			"path": "golang.org/x/crypto/blowfish",
+			"revision": "1777f3ba8c1fed80fcaec3317e3aaa4f627764d2",
+			"revisionTime": "2016-03-18T12:12:46Z"
+		},
+		{
+			"checksumSHA1": "N5fb5y92DFIP+wUhi1rSwPp9vyk=",
+			"path": "golang.org/x/crypto/ssh/terminal",
+			"revision": "1777f3ba8c1fed80fcaec3317e3aaa4f627764d2",
+			"revisionTime": "2016-03-18T12:12:46Z"
+		}
+	],
+	"rootPath": "github.com/thcyron/tracklog"
+}
