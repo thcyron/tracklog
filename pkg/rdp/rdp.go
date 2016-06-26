@@ -13,17 +13,14 @@ func Reduce(points []Point, epsilon float64) []Point {
 		return points
 	}
 
-	p, q := points[0], points[len(points)-1]
-	m := (q.Y - p.Y) / (q.X - p.X)
-	t := p.Y - m*p.X
-
 	var (
+		p, q  = points[0], points[len(points)-1]
 		dmax  float64
 		index int
 	)
 	for i := 1; i <= len(points)-2; i++ {
 		pp := points[i]
-		d := distance(pp.X, pp.Y, m, t)
+		d := distance(pp, p, q)
 		if d > dmax {
 			dmax = d
 			index = i
@@ -38,8 +35,7 @@ func Reduce(points []Point, epsilon float64) []Point {
 	return []Point{p, q}
 }
 
-func distance(x, y, m, t float64) float64 {
-	dt := math.Abs(t - y + m*x)
-	phi := 0.5*math.Pi - math.Atan(m)
-	return math.Sin(phi) * dt
+func distance(p0, p1, p2 Point) float64 {
+	return math.Abs((p2.Y-p1.Y)*p0.X-(p2.X-p1.X)*p0.Y+p2.X*p1.Y-p2.Y*p1.X) /
+		math.Sqrt(math.Pow(p2.Y-p1.Y, 2)+math.Pow(p2.X-p1.X, 2))
 }
