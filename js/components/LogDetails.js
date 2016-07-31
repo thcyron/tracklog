@@ -33,7 +33,11 @@ export default class LogDetails extends React.Component {
       ["Distance", this.props.log.get("distance")],
       ["∅ Speed", this.props.log.get("speed")],
       ["∅ Pace", this.props.log.get("pace")],
-    ];
+    ]
+    if (this.props.log.has("ascent")) {
+      details.push(["Ascent", this.props.log.get("ascent")]);
+      details.push(["Descent", this.props.log.get("descent")]);
+    }
 
     if (this.props.log.get("hr")) {
       details.push(["∅ HR", this.props.log.get("hr")]);

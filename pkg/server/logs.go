@@ -198,6 +198,8 @@ type logDataLog struct {
 	HRZones  logDataHRZones   `json:"hrzones"`
 	Tracks   [][]logDataPoint `json:"tracks"`
 	Tags     []string         `json:"tags"`
+	Ascent   string           `json:"ascent,omitempty"`
+	Descent  string           `json:"descent,omitempty"`
 }
 
 type logDataHRZones struct {
@@ -260,7 +262,7 @@ func (s *Server) HandleGetLog(w http.ResponseWriter, r *http.Request) {
 		data.Log.Tags = make([]string, 0, 0)
 	}
 
-	var cumDistance float64
+	var cumDistance, ascent, descent float64
 	performReduce := r.FormValue("reduce") != "no"
 
 	for _, track := range log.Tracks {
@@ -298,6 +300,13 @@ func (s *Server) HandleGetLog(w http.ResponseWriter, r *http.Request) {
 				cumDistance += point.DistanceTo(lastPoint)
 				p.CumulatedDistance = cumDistance
 				p.Speed = point.SpeedTo(lastPoint)
+
+				dEle := point.Elevation - lastPoint.Elevation
+				if dEle >= 0 {
+					ascent += dEle
+				} else {
+					descent += -dEle
+				}
 			} else if len(points) > 1 {
 				nextPoint := points[i+1]
 				p.CumulatedDistance = cumDistance
@@ -306,6 +315,11 @@ func (s *Server) HandleGetLog(w http.ResponseWriter, r *http.Request) {
 			ps = append(ps, p)
 		}
 		data.Log.Tracks = append(data.Log.Tracks, ps)
+	}
+
+	if ascent != 0 || descent != 0 {
+		data.Log.Ascent = fmt.Sprintf("%d m", int(ascent))
+		data.Log.Descent = fmt.Sprintf("%d m", int(descent))
 	}
 
 	hrSummary := heartrate.SummaryForLog(log)
