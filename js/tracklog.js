@@ -59,10 +59,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const nodes = document.querySelectorAll(".logs-upload-button");
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i];
+
+    const changeButton = ({textAttribute, disabled}) => {
+      node.textContent = node.attributes.getNamedItem(textAttribute).value;
+      node.disabled = disabled;
+    };
+
     node.addEventListener("click", () => {
-      const fileInput = document.createElement("input");
-      fileInput.type = "file";
-      fileInput.multiple = true;
+      const fileInput = node.nextElementSibling;
 
       fileInput.addEventListener("change", (event) => {
         const input = event.target;
@@ -77,6 +81,11 @@ document.addEventListener("DOMContentLoaded", () => {
           files: filesArray,
         })
         .then((results) => {
+          changeButton({
+            textAttribute: "data-text-upload",
+            disabled: false,
+          });
+
           if (results.length == 1) {
             const id = results[0].id;
             window.location = `/logs/${id}`;
@@ -85,7 +94,17 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         })
         .catch((err) => {
+          changeButton({
+            textAttribute: "data-text-upload",
+            disabled: false,
+          });
+
           alert(err);
+        });
+
+        changeButton({
+          textAttribute: "data-text-uploading",
+          disabled: true,
         });
       });
 

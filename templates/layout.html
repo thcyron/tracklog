@@ -23,7 +23,8 @@
           <li class="{{if eq .ActiveTab "logs"}}active{{end}}"><a href="/logs">Logs</a></li>
         </ul>
         <div class="navbar-left navbar-upload-log-button">
-          <button class="btn btn-primary navbar-btn logs-upload-button">Upload Log</button>
+          <button class="btn btn-primary navbar-btn logs-upload-button" data-text-upload="Upload Logs" data-text-uploading="Uploading Logs …">Upload Logs</button>
+          <input type="file" class="logs-upload-button-file" multiple>
         </div>
         <div class="navbar-right">
           <p class="navbar-text">
