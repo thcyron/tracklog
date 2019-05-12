@@ -9,23 +9,24 @@
     "production:build:js": "NODE_ENV=production browserify -t babelify js/tracklog.js | uglifyjs -m -c --screw-ie8 > public/tracklog.js"
   },
   "devDependencies": {
-    "babel-cli": "^6.0.0",
-    "babel-preset-es2015": "^6.3.13",
-    "babel-preset-react": "^6.3.13",
-    "browserify": "^10.2.6",
-    "babelify": "^7.2.0",
-    "uglify-js": "^2.6.1",
-    "node-sass": "^3.4.2"
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "@babel/preset-react": "^7.0.0",
+    "babelify": "^10.0.0",
+    "browserify": "^16.2.3",
+    "uglify-js": "^3.5.11",
+    "node-sass": "^4.12.0"
   },
   "dependencies": {
-    "react": "^0.14.5",
-    "react-dom": "^0.14.5",
-    "flux": "^2.1.1",
-    "bootstrap-sass": "^3.3.6",
-    "leaflet": "^0.7.7",
-    "whatwg-fetch": "^0.10.1",
-    "immutable": "^3.7.6",
-    "highcharts": "^4.2.1",
-    "classnames": "^2.2.3"
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "flux": "^3.1.3",
+    "bootstrap-sass": "^3.4.1",
+    "leaflet": "^1.5.1",
+    "whatwg-fetch": "^3.0.0",
+    "immutable": "^3.8.2",
+    "highcharts": "^7.1.1",
+    "classnames": "^2.2.6"
   }
 }

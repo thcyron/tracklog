@@ -37,7 +37,7 @@ export default class LogMap extends React.Component {
       });
     }).toJS();
 
-    this.multiPolyline = Leaflet.multiPolyline(latlngs, { color: "red", weight: 3, opacity: 0.8 });
+    this.multiPolyline = Leaflet.polyline(latlngs, { color: "red", weight: 3, opacity: 0.8 });
     this.multiPolyline.addTo(this.map);
     this.map.fitBounds(this.multiPolyline.getBounds());
   }
