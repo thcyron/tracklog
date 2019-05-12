@@ -9,13 +9,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const nodes = document.querySelectorAll("a[data-method]");
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i];
+    const method = node.attributes.getNamedItem("data-method").value;
+    node.appendChild(createForm(node.href, method));
     node.addEventListener("click", (event) => {
       event.preventDefault();
       const a = event.target;
-      const method = a.attributes.getNamedItem("data-method").value;
-      if (method) {
-        createForm(a.href, method).submit();
-      }
+      const form = a.querySelector("form");
+      form.submit();
     });
   }
 });
@@ -24,6 +24,7 @@ function createForm(href, method) {
   const form = document.createElement("form");
   form.method = "POST";
   form.action = href;
+  form.style = "display: none;"
 
   const methodField = document.createElement("input");
   methodField.type = "hidden";
