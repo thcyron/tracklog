@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <title>{{if .Title}}{{.Title}} – Tracklog{{else}}Tracklog{{end}}</title>
-    <link rel="stylesheet" href="/static/tracklog.css">
-    <script src="/static/tracklog.js"></script>
+    <link rel="stylesheet" href="/static/app.css">
+    <script src="/static/app.js"></script>
     <script>
       Tracklog.csrfToken = {{.CSRFToken}};
       {{with .MapboxAccessToken}}
