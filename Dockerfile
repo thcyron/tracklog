@@ -1,6 +1,8 @@
 FROM golang:1.12
 
-COPY . /usr/src/tracklog
+COPY go.* *.go /usr/src/tracklog/
+COPY cmd/ /usr/src/tracklog/cmd/
+COPY pkg/ /usr/src/tracklog/pkg/
 
 ENV CGO_ENABLED 0
 
@@ -13,16 +15,19 @@ RUN go build
 
 FROM node:10
 
-COPY . .
+COPY package.json .babelrc /usr/src/tracklog/
+COPY css/ /usr/src/tracklog/css/
+COPY js/ /usr/src/tracklog/js/
 
+WORKDIR /usr/src/tracklog
 RUN npm install
 RUN npm run build
 
 
 FROM scratch
 
-COPY --from=1 public /public
-COPY ./templates /templates
+COPY --from=1 /usr/src/tracklog/public /public/
+COPY ./templates /templates/
 COPY --from=0 /usr/src/tracklog/cmd/server/server /bin/
 COPY --from=0 /usr/src/tracklog/cmd/control/control /bin/
 
