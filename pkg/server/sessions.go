@@ -54,9 +54,9 @@ func (s *Server) HandlePostSignIn(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-        token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id": user.ID,
-		"v": user.PasswordVersion})
+		"v":       user.PasswordVersion})
 
 	tokenString, err := token.SignedString([]byte(s.config.Server.SigningKey))
 	if err != nil {
@@ -115,8 +115,8 @@ func (s *Server) userFromRequest(r *http.Request) (*models.User, error) {
 		return nil, nil
 	}
 
-        claims, ok := token.Claims.(jwt.MapClaims)
-        if !ok {
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
 		return nil, nil
 	}
 
