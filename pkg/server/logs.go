@@ -176,6 +176,7 @@ func (s *Server) HandlePostLog(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusCreated)
 	resp := postLogResponse{ID: log.ID}
 	json.NewEncoder(w).Encode(resp)
