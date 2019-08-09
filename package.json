@@ -6,7 +6,7 @@
     "build:css": "node-sass --output-style compressed css/tracklog.scss public/app.css",
     "build:js": "browserify -t babelify -d js/tracklog.js > public/app.js",
     "production:build": "npm run build:css & npm run production:build:js",
-    "production:build:js": "NODE_ENV=production browserify -t babelify js/tracklog.js | uglifyjs -m -c --screw-ie8 > public/app.js"
+    "production:build:js": "NODE_ENV=production browserify -t babelify js/tracklog.js | uglifyjs -m -c > public/app.js"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
