@@ -7,4 +7,4 @@ mapbox_access_token = ""
 
 [db]
 driver = "postgres"
-dsn = "dbname=tracklog sslmode=disable"
+dsn = "postgres://postgres:password@postgres/tracklog?sslmode=disable"

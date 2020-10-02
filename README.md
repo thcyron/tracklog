@@ -13,6 +13,11 @@ bring your own Postgres server. You also have to provide a config file.
 
     docker run -v /path/to/config.toml:/config.toml -p 8080:8080 thcyron/tracklog
 
+Alternately, use docker-compose to run:
+
+    docker-compose up -d
+    docker exec -it tracklog /bin/tracklog-control -config /config.toml user add <name>
+
 ## Installation
 
 First, make sure you have Go and Node.js installed.

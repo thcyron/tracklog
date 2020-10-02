@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  tracklog:
+    build: .
+    image: thcyron/tracklog:latest
+    container_name: tracklog
+    entrypoint: /bin/tracklog-server -config /config.toml
+    restart: always
+    depends_on:
+      - postgres
+    ports:
+      - 8080:8080
+    volumes:
+      - ./config.toml.example:/config.toml
+
+  postgres:
+    image: postgres:12-alpine
+    container_name: postgres
+    restart: always
+    environment:
+      - POSTGRES_DB=tracklog
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - ./pkg/db/postgres.sql:/docker-entrypoint-initdb.d/init.sql
