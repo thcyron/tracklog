@@ -15,5 +15,5 @@ require (
 	github.com/naoina/toml v0.1.1
 	github.com/thcyron/gpx v0.0.0-20160210223831-f95a7bb694cc
 	github.com/thcyron/sqlbuilder v2.0.1-0.20160307210201-609a1abb836e+incompatible
-	golang.org/x/crypto v0.0.0-20190701094942-4def268fd1a4
+	golang.org/x/crypto v0.1.0
 )
